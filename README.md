@@ -10,6 +10,8 @@
 3. check `Developer mode`
 4. click on `Load unpacked extension`
 5. add REPOSITORY_DIRECTORY/build
+6. Now you can check background script via link in extension `Inspect views: background page` and you will see some messages in console
+7. And open any http (not https) page and open development tools and console. You can see messages from content scripts.
 
 # What it can do.
 
