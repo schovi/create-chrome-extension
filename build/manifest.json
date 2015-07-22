@@ -1,0 +1,20 @@
+{
+  "manifest_version": 2,
+  "name": "Webpack Chrome Extension",
+  "description": "",
+  "version": "0.0.1",
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["injector/content.js"]
+    }
+  ],
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+  "background": {
+    "persistent": false,
+    "scripts": ["injector/background.js"]
+  },
+  "permissions": [
+    "background"
+  ]
+}
