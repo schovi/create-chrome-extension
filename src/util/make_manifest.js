@@ -17,6 +17,10 @@ export default function() {
 
   const manifest = _.merge(manifestSkelet, values);
 
+  if(process.env.NODE_ENV == 'development') {
+    manifest["content_security_policy"] = "script-src 'self' 'unsafe-eval'; object-src 'self'"
+  }
+  
   const manifestPath = path.join(buildPath, "manifest.json");
 
   console.log(`Making 'manifest.json' in '${manifestPath}'`)
