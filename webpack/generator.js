@@ -55,7 +55,8 @@ function configGenerator(isDevelopment, entryScripts) {
             // Why only-dev-server instead of dev-server:
             // https://github.com/webpack/webpack/issues/418#issuecomment-54288041
             'webpack/hot/only-dev-server',
-            path.join(__dirname, "../src", entryScript)
+            path.join(__dirname, "../src", entryScript),
+            './override_hot_download_update_chunk',
           ]
         } else {
           entries[name] = [
