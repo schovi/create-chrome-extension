@@ -1,8 +1,9 @@
 import fs from "fs";
 import path from "path"
 import { execSync } from "child_process";
-import ExtractTextPlugin from "extract-text-webpack-plugin"
-import webpack from 'webpack'
+import ExtractTextPlugin from "extract-text-webpack-plugin";
+import webpack from 'webpack';
+import _ from 'lodash';
 
 var styleLoaders = {
   'css': '',
@@ -12,21 +13,24 @@ var styleLoaders = {
 };
 
 
-function configGenerator(isDevelopment) {
+function configGenerator(isDevelopment, entryScripts) {
 
   function makeStyleLoaders() {
     return Object.keys(styleLoaders).map(function(ext) {
       var prefix = 'css-loader?sourceMap&root=../assets'//!autoprefixer-loader?browsers=last 2 version';
       var extLoaders = prefix + styleLoaders[ext];
-      var loader = isDevelopment
-        ? 'style-loader!' + extLoaders
-        : ExtractTextPlugin.extract('style-loader', extLoaders);
+      var loader = 'style-loader!' + extLoaders;
+
       return {
         loader: loader,
         test: new RegExp('\\.(' + ext + ')$'),
         exclude: /node_modules/
       };
     });
+  }
+
+  function stripExtension(filename) {
+    return filename.split(".").slice(0,-1).join(".") || filename + ""
   }
 
   return {
@@ -42,31 +46,23 @@ function configGenerator(isDevelopment) {
     entry: (function() {
       var entries = {}
 
-      if(isDevelopment) {
-        entries.content = [
-          'webpack-dev-server/client?http://localhost:3001',
-          // Why only-dev-server instead of dev-server:
-          // https://github.com/webpack/webpack/issues/418#issuecomment-54288041
-          'webpack/hot/only-dev-server',
-          path.join(__dirname, "../src/content/index.js")
-        ]
+      _.each(entryScripts, function(entryScript) {
+        let name = stripExtension(entryScript)
 
-        entries.background = [
-          'webpack-dev-server/client?http://localhost:3001',
-          // Why only-dev-server instead of dev-server:
-          // https://github.com/webpack/webpack/issues/418#issuecomment-54288041
-          'webpack/hot/only-dev-server',
-          path.join(__dirname, "../src/background/index.js")
-        ]
-      } else {
-        entries.content = [
-          path.join(__dirname, "../src/content/index.js")
-        ]
-
-        entries.background = [
-          path.join(__dirname, "../src/background/index.js")
-        ]
-      }
+        if(isDevelopment) {
+          entries[name] = [
+            'webpack-dev-server/client?http://localhost:3001',
+            // Why only-dev-server instead of dev-server:
+            // https://github.com/webpack/webpack/issues/418#issuecomment-54288041
+            'webpack/hot/only-dev-server',
+            path.join(__dirname, "../src", entryScript)
+          ]
+        } else {
+          entries[name] = [
+            path.join(__dirname, "../src", entryScript)
+          ]
+        }
+      })
 
       return entries
     })(),
@@ -77,15 +73,15 @@ function configGenerator(isDevelopment) {
 
       if(isDevelopment) {
         output = {
-          path: path.join(__dirname, "../build/script"),
+          path: path.join(__dirname, "../build"),
           filename: '[name].js',
           chunkFilename: '[name]-[chunkhash].js',
           publicPath: 'http://localhost:3001/'
         }
       } else {
         output = {
-          path: path.join(__dirname, "../build/script"),
-          filename: "[name]-bundle.js"
+          path: path.join(__dirname, "../build"),
+          filename: "[name].js"
         }
       }
       return output
@@ -111,7 +107,6 @@ function configGenerator(isDevelopment) {
         ])
       } else {
         plugins = plugins.concat([
-          new ExtractTextPlugin("[name].css", { allChunks: true }),
           new webpack.optimize.UglifyJsPlugin({
             compress: {
               // Because uglify reports so many irrelevant warnings.

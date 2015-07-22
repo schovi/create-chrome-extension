@@ -1,7 +1,7 @@
 {
-  "name": "1188messenger",
+  "name": "WebpackChromeExtension",
   "version": "0.0.1",
-  "description": "",
+  "description": "Bootstrap playground for developing Chrome extensions with all new features like Webpack, Babel, React and almost everything you want.",
   "private": true,
   "scripts": {
     "start": "gulp"
@@ -25,6 +25,7 @@
     "immutable": "^3.7.4",
     "less": "^2.5.1",
     "less-loader": "^2.2.0",
+    "lodash": "^3.10.0",
     "node-libs-browser": "^0.5.2",
     "node-sass": "^3.2.0",
     "react": "^0.13.3",

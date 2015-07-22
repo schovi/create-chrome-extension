@@ -1,5 +1,5 @@
-console.log(">>Hello world background from injector<<")
-
+export default function(scriptName) {
+  const script = `// Injector file for '${scriptName}'
 var context = this;
 
 // http://stackoverflow.com/questions/8403108/calling-eval-in-particular-context/25859853#25859853
@@ -13,5 +13,8 @@ function reqListener () {
 
 var request = new XMLHttpRequest();
 request.onload = reqListener;
-request.open("get", "http://localhost:3001/background.js", true);
-request.send();
+request.open("get", "http://localhost:3001/${scriptName}", true);
+request.send();`;
+
+  return script;
+}
