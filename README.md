@@ -1,6 +1,6 @@
 # Webpack Chrome extension
 
-Bootstrap playground for developing Chrome extensions with all new features like [Webpack](http://webpack.github.io/), [Babel](https://babeljs.io/), [React](https://facebook.github.io/react/) and almost everything you want.
+Bootstrap playground for developing Chrome extensions with all javascript features like [NPM package manager](https://www.npmjs.com/), [Webpack](http://webpack.github.io/), [Babel](https://babeljs.io/), [React](https://facebook.github.io/react/) and almost everything you want.
 
 ## Installation
 

@@ -1,7 +1,6 @@
 import fs from "fs";
 import path from "path"
 import { execSync } from "child_process";
-import ExtractTextPlugin from "extract-text-webpack-plugin";
 import webpack from 'webpack';
 import _ from 'lodash';
 
@@ -175,22 +174,22 @@ function configGenerator(isDevelopment, entryScripts) {
       ],
       alias: (function() {
         var alias = {
-          "lodash$": require.resolve(path.join(__dirname, '../node_modules/lodash')),
-          "promise$": require.resolve(path.join(__dirname, '../node_modules/bluebird')),
-          "bluebird$": require.resolve(path.join(__dirname, '../node_modules/bluebird')),
-          "immutable$": require.resolve(path.join(__dirname, '../node_modules/immutable')),
-          "react$": require.resolve(path.join(__dirname, '../node_modules/react')),
-          "react/addons$": require.resolve(path.join(__dirname, '../node_modules/react/addons'))
+          // "lodash$": require.resolve(path.join(__dirname, '../node_modules/lodash')),
+          // "promise$": require.resolve(path.join(__dirname, '../node_modules/bluebird')),
+          // "bluebird$": require.resolve(path.join(__dirname, '../node_modules/bluebird')),
+          // "immutable$": require.resolve(path.join(__dirname, '../node_modules/immutable')),
+          // "react$": require.resolve(path.join(__dirname, '../node_modules/react')),
+          // "react/addons$": require.resolve(path.join(__dirname, '../node_modules/react/addons'))
         }
 
         // alias[require.resolve(path.join(__dirname, '../node_modules/webpack/lib/JsonpMainTemplate.runtime.js'))] = require.resolve(path.join(__dirname, './override/JsonpMainTemplate.runtime.js'))
 
-
+        console.log("Overriding original", originalJsonpMainTemplatePath, "with custom", overridenJsonpMainTemplatePath)
+        
         const originalJsonpMainTemplatePath  = require.resolve(path.join(__dirname, '../node_modules/webpack/lib/JsonpMainTemplate.runtime.js'))
         const overridenJsonpMainTemplatePath = require.resolve(path.join(__dirname, './override/JsonpMainTemplate.runtime.js'))
         const overridenJsonpMainTemplate     = fs.readFileSync(overridenJsonpMainTemplatePath, {encoding: "utf8"})
 
-        console.log("Overriding original", originalJsonpMainTemplatePath, "with custom", overridenJsonpMainTemplatePath)
 
         fs.writeFileSync(originalJsonpMainTemplatePath, overridenJsonpMainTemplate)
 
