@@ -40,6 +40,7 @@ You should do this before editing any code to see how it works.
 - [x] Make Hot reload works. There is problem with including hot reload chunks which are included via new script tag into DOM. new code is then eval in default (window) context and not in context of extension. Have to do same hack as you can see in injector files and download chunks via XMLHttpRequest.
 - [x] Move `config/manifest.json`, `util/make_injector.js` and `util/make_manifest.js` somewhere out of src to keep src in full will of developer
 - [ ] Create extension from build process and move it into release/
+- [ ] Solve Hot reload fix better than overriding file in /node_modules. It is really ugly and hacky :)
 - [ ] Create example repository with React app in content script (We already did that, so just create that repo :)
 - [ ] Test assets (images, fonts etc) and convert them into base64 into javascripts (including styles)
 
