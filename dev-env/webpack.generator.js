@@ -12,7 +12,6 @@ var styleLoaders = {
   'styl': '!stylus-loader'
 };
 
-
 function configGenerator(isDevelopment, entryScripts) {
 
   function makeStyleLoaders() {

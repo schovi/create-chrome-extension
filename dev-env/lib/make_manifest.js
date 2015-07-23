@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import packageConfig from '../../package.json';
-import manifestSkelet from '../config/manifest.json';
+import manifestSkelet from '../../src/manifest.json';
 import makeInjector from './make_injector';
 import _ from 'lodash';
 import rmrf from 'rmrf';
@@ -20,7 +20,7 @@ export default function() {
   if(process.env.NODE_ENV == 'development') {
     manifest["content_security_policy"] = "script-src 'self' 'unsafe-eval'; object-src 'self'"
   }
-  
+
   const manifestPath = path.join(buildPath, "manifest.json");
 
   console.log(`Making 'manifest.json' in '${manifestPath}'`)

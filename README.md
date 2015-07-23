@@ -9,7 +9,13 @@ Bootstrap playground for developing Chrome extensions with all new features like
 
 ## Usage
 
-### How to run whole thing.
+You can do anything in src/ as you wish, except following:
+- Only javascripts directly in src/ can be used as entry points in your manifest.json
+- src/manifest.json is processed and updated by package.json (name, description and version) and scripts have to point into src/xxx.js
+
+If you want to change behaviour of development environment you can edit dev-env/ directory
+
+## How to run development environment
 
 You should do this before editing any code to see how it works.
 
@@ -21,20 +27,10 @@ You should do this before editing any code to see how it works.
 6. Now you can check background script via link in extension `Inspect views: background page` and you will see some messages in console
 7. And open any http (not https) page and open development tools and console. You can see messages from content scripts.
 
-### Managing your code.
+## How to build extension
 
-You can do anything in src/ as you wish, except following:
-
-1. config/manifest.json
-  - name, description, version is updated from package.json
-  - scripts (`{background: {scripts:["background.js"], content_scripts: [{js:["content.js"]}]}`) are processed and for now have to be directly in src/
-2. keep `util/make_injector.js` and `util/make_manifest.js`
-
-
-
-## What it can do.
-
-The manifest and everything is currently configured for support background and content scripts. If you want to add you program you can edit `src/background/index` and `src/content/index`. In second one you can see example of babel and import another file.
+1. run `gulp -p`
+2. It will compile scripts, styles and other assets into build/
 
 ## TODO
 
@@ -42,7 +38,8 @@ The manifest and everything is currently configured for support background and c
 - [x] Move everything from build directory and leave it only for building development extenstion.
 - [x] Make production build. Replace injector scripts with final builded one.
 - [x] Make Hot reload works. There is problem with including hot reload chunks which are included via new script tag into DOM. new code is then eval in default (window) context and not in context of extension. Have to do same hack as you can see in injector files and download chunks via XMLHttpRequest.
-- [ ] Move `config/manifest.json`, `util/make_injector.js` and `util/make_manifest.js` somewhere out of src to keep src in full will of developer
+- [x] Move `config/manifest.json`, `util/make_injector.js` and `util/make_manifest.js` somewhere out of src to keep src in full will of developer
+- [ ] Create extension from build process and move it into release/
 - [ ] Create example repository with React app in content script (We already did that, so just create that repo :)
 - [ ] Test assets (images, fonts etc) and convert them into base64 into javascripts (including styles)
 

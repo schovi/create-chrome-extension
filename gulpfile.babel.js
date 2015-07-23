@@ -1,10 +1,10 @@
 import gulp from 'gulp';
-import configGenerator from './webpack/generator';
-import webpackBuild from './webpack/build';
-import webpackDevServer from './webpack/server';
+import configGenerator from './dev-env/webpack.generator';
+import webpackBuild from './dev-env/webpack.build';
+import webpackDevServer from './dev-env/webpack.server';
 import yargs from 'yargs';
 import runSequence from 'run-sequence';
-import makeManifest from './src/util/make_manifest'
+import makeManifest from './dev-env/lib/make_manifest'
 
 const args = yargs
   .alias('p', 'production')
