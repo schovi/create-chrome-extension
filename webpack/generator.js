@@ -55,8 +55,8 @@ function configGenerator(isDevelopment, entryScripts) {
             // Why only-dev-server instead of dev-server:
             // https://github.com/webpack/webpack/issues/418#issuecomment-54288041
             'webpack/hot/only-dev-server',
-            path.join(__dirname, "../src", entryScript),
-            './override_hot_download_update_chunk',
+            path.join(__dirname, "../src", entryScript)//,
+            // './override_hot_download_update_chunk',
           ]
         } else {
           entries[name] = [
@@ -174,16 +174,30 @@ function configGenerator(isDevelopment, entryScripts) {
         path.join(__dirname, "../src/styles/"),
         path.join(__dirname, "../assets")
       ],
-      alias: {
-        // "lodash": __dirname + '/../node_modules/lodash',
-        // "promise": __dirname + '/javascripts/lib/promise',
+      alias: (function() {
+        var alias = {
+          "lodash$": require.resolve(path.join(__dirname, '../node_modules/lodash')),
+          "promise$": require.resolve(path.join(__dirname, '../node_modules/bluebird')),
+          "bluebird$": require.resolve(path.join(__dirname, '../node_modules/bluebird')),
+          "immutable$": require.resolve(path.join(__dirname, '../node_modules/immutable')),
+          "react$": require.resolve(path.join(__dirname, '../node_modules/react')),
+          "react/addons$": require.resolve(path.join(__dirname, '../node_modules/react/addons'))
+        }
 
-        // Prevence před requirnutím různých verzí
-        "promise$": require.resolve(path.join(__dirname, '../node_modules/bluebird')),
-        "immutable$": require.resolve(path.join(__dirname, '../node_modules/immutable')),
-        "react$": require.resolve(path.join(__dirname, '../node_modules/react')),
-        "react/addons$": require.resolve(path.join(__dirname, '../node_modules/react/addons'))
-      }
+        // alias[require.resolve(path.join(__dirname, '../node_modules/webpack/lib/JsonpMainTemplate.runtime.js'))] = require.resolve(path.join(__dirname, './override/JsonpMainTemplate.runtime.js'))
+
+
+        const originalJsonpMainTemplatePath  = require.resolve(path.join(__dirname, '../node_modules/webpack/lib/JsonpMainTemplate.runtime.js'))
+        const overridenJsonpMainTemplatePath = require.resolve(path.join(__dirname, './override/JsonpMainTemplate.runtime.js'))
+        const overridenJsonpMainTemplate     = fs.readFileSync(overridenJsonpMainTemplatePath, {encoding: "utf8"})
+
+        console.log("Overriding original", originalJsonpMainTemplatePath, "with custom", overridenJsonpMainTemplatePath)
+
+        fs.writeFileSync(originalJsonpMainTemplatePath, overridenJsonpMainTemplate)
+
+        return alias;
+
+      })()
     },
 
     // Loaders

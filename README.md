@@ -41,7 +41,7 @@ The manifest and everything is currently configured for support background and c
 - [x] Make manifest.json dynamic based on package.json name, description, version.
 - [x] Move everything from build directory and leave it only for building development extenstion.
 - [x] Make production build. Replace injector scripts with final builded one.
-- [ ] Make Hot reload works. There is problem with including hot reload chunks which are included via new script tag into DOM. new code is then eval in default (window) context and not in context of extension. Have to do same hack as you can see in injector files and download chunks via XMLHttpRequest.
+- [x] Make Hot reload works. There is problem with including hot reload chunks which are included via new script tag into DOM. new code is then eval in default (window) context and not in context of extension. Have to do same hack as you can see in injector files and download chunks via XMLHttpRequest.
 - [ ] Move `config/manifest.json`, `util/make_injector.js` and `util/make_manifest.js` somewhere out of src to keep src in full will of developer
 - [ ] Create example repository with React app in content script (We already did that, so just create that repo :)
 - [ ] Test assets (images, fonts etc) and convert them into base64 into javascripts (including styles)
