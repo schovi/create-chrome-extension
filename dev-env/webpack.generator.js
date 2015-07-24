@@ -185,7 +185,7 @@ function configGenerator(isDevelopment, entryScripts) {
         // alias[require.resolve(path.join(__dirname, '../node_modules/webpack/lib/JsonpMainTemplate.runtime.js'))] = require.resolve(path.join(__dirname, './override/JsonpMainTemplate.runtime.js'))
 
         console.log("Overriding original", originalJsonpMainTemplatePath, "with custom", overridenJsonpMainTemplatePath)
-        
+
         const originalJsonpMainTemplatePath  = require.resolve(path.join(__dirname, '../node_modules/webpack/lib/JsonpMainTemplate.runtime.js'))
         const overridenJsonpMainTemplatePath = require.resolve(path.join(__dirname, './override/JsonpMainTemplate.runtime.js'))
         const overridenJsonpMainTemplate     = fs.readFileSync(overridenJsonpMainTemplatePath, {encoding: "utf8"})
@@ -204,7 +204,7 @@ function configGenerator(isDevelopment, entryScripts) {
         var loaders = []
 
         // Assets
-        loaders.concat([
+        loaders = loaders.concat([
           {
             test: /\.(png|jpg|jpeg|gif|svg)/,
             loader: "url-loader?limit=10000&name=[name]-[hash].[ext]",
