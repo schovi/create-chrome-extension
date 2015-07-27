@@ -18,7 +18,21 @@ export default function() {
   const manifest = _.merge(manifestSkelet, values);
 
   if(process.env.NODE_ENV == 'development') {
-    manifest["content_security_policy"] = "script-src 'self' 'unsafe-eval'; object-src 'self'"
+    let csp = manifest["content_security_policy"] || ""
+
+    if(~csp.indexOf('object-src')) {
+      csp = csp.replace('object-src', "object-src 'self'")
+    } else {
+      csp = `object-src 'self'; ${csp}`
+    }
+
+    if(~csp.indexOf('script-src')) {
+      csp = csp.replace('script-src', "script-src 'self' 'unsafe-eval'")
+    } else {
+      csp = `script-src 'self' 'unsafe-eval'; ${csp}`
+    }
+
+    manifest["content_security_policy"] = csp
   }
 
   const manifestPath = path.join(buildPath, "manifest.json");
