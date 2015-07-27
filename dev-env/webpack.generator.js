@@ -35,12 +35,14 @@ function configGenerator(isDevelopment, entryScripts) {
     ///// Lowlevel config
     cache: isDevelopment,
     debug: isDevelopment,
-    devtool: '',//isDevelopment ? 'cheap-module-eval-source-map' : '',
+    devtool: isDevelopment ? 'cheap-module-eval-source-map' : '',
     context: __dirname,
     node: {__dirname: true},
 
-    ///// Applikační config
+    ///// App config
 
+    // Entry points in your app
+    // There we use scripts from your manifest.json
     entry: (function() {
       var entries = {}
 
@@ -66,7 +68,7 @@ function configGenerator(isDevelopment, entryScripts) {
       return entries
     })(),
 
-    // Výstup
+    // Output
     output: (function() {
       var output;
 
@@ -86,6 +88,7 @@ function configGenerator(isDevelopment, entryScripts) {
       return output
     })(),
 
+    // Plugins
     plugins: (function() {
       let plugins = [
         new webpack.DefinePlugin({
@@ -98,6 +101,7 @@ function configGenerator(isDevelopment, entryScripts) {
       ];
 
       if(isDevelopment) {
+        // Development plugins for hot reload
         plugins = plugins.concat([
           // NotifyPlugin,
           new webpack.HotModuleReplacementPlugin(),
@@ -105,6 +109,7 @@ function configGenerator(isDevelopment, entryScripts) {
           new webpack.NoErrorsPlugin()
         ])
       } else {
+        // Production plugins for optimizing code
         plugins = plugins.concat([
           new webpack.optimize.UglifyJsPlugin({
             compress: {
@@ -127,74 +132,36 @@ function configGenerator(isDevelopment, entryScripts) {
         ])
       }
 
-      // plugins.push(new webpack.IgnorePlugin(/^(vertx|necodalsiho)$/))
-
-      // plugins.push(
-      //   function() {
-      //     this.plugin("done", function(stats) {
-      //       let jsonStats = stats.toJson({
-      //         chunkModules: true,
-      //         exclude: [
-      //           /node_modules/ //[\\\/]react(-router)?[\\\/]/,
-      //         ],
-      //       });
-      //
-      //       jsonStats.publicPath = isDevelopment ? "build" : "";
-      //       jsonStats.appVersion = "1.0";
-      //       jsonStats.appCommit = execSync("git rev-parse --short HEAD").toString();
-      //
-      //       const folderPath = path.join(__dirname, "../build");
-      //
-      //       if (!fs.existsSync(folderPath)) {
-      //         fs.mkdirSync(folderPath);
-      //       }
-      //
-      //       fs.writeFileSync(path.join(folderPath, "stats.json"), JSON.stringify(jsonStats));
-      //     });
-      //   }
-      // )
-
+      // CUSTOM
+      // if you need to exclude anything pro loading
+      // plugins.push(new webpack.IgnorePlugin(/^(vertx|somethingelse)$/))
 
       return plugins;
     })(),
 
-    // Pokud potřebujeme změnit hodnotu toho co se requiruje
+    // CUSTOM
+    // If you need to change value of required (imported) module
+    // for example if you dont want any module import 'net' for various reason like code only for non browser envirinment
     externals: {
-      // example: function() {}
+      // net: function() {}
     },
 
     resolve: {
       extensions: ['', '.js', '.json'],
       modulesDirectories: ['src', 'node_modules'],
       root: [
-        // TODO kam dáme styly?
         path.join(__dirname, "../src/client/"),
-        path.join(__dirname, "../src/styles/"),
         path.join(__dirname, "../assets")
       ],
       alias: (function() {
+        // CUSTOM
+        // If you want to override some path with another. Good for importing same version of React across different libraries
         var alias = {
-          // "lodash$": require.resolve(path.join(__dirname, '../node_modules/lodash')),
-          // "promise$": require.resolve(path.join(__dirname, '../node_modules/bluebird')),
-          // "bluebird$": require.resolve(path.join(__dirname, '../node_modules/bluebird')),
-          // "immutable$": require.resolve(path.join(__dirname, '../node_modules/immutable')),
           // "react$": require.resolve(path.join(__dirname, '../node_modules/react')),
           // "react/addons$": require.resolve(path.join(__dirname, '../node_modules/react/addons'))
         }
 
-        // alias[require.resolve(path.join(__dirname, '../node_modules/webpack/lib/JsonpMainTemplate.runtime.js'))] = require.resolve(path.join(__dirname, './override/JsonpMainTemplate.runtime.js'))
-
-        console.log("Overriding original", originalJsonpMainTemplatePath, "with custom", overridenJsonpMainTemplatePath)
-
-        const originalJsonpMainTemplatePath  = require.resolve(path.join(__dirname, '../node_modules/webpack/lib/JsonpMainTemplate.runtime.js'))
-        const overridenJsonpMainTemplatePath = require.resolve(path.join(__dirname, './override/JsonpMainTemplate.runtime.js'))
-        const overridenJsonpMainTemplate     = fs.readFileSync(overridenJsonpMainTemplatePath, {encoding: "utf8"})
-
-
-        fs.writeFileSync(originalJsonpMainTemplatePath, overridenJsonpMainTemplate)
-
         return alias;
-
       })()
     },
 
@@ -204,20 +171,23 @@ function configGenerator(isDevelopment, entryScripts) {
         var loaders = []
 
         // Assets
+
+        // Inline all assets with base64 into javascripts
+        // TODO make and test requiring assets with url
         loaders = loaders.concat([
           {
             test: /\.(png|jpg|jpeg|gif|svg)/,
-            loader: "url-loader?limit=10000&name=[name]-[hash].[ext]",
+            loader: "url-loader?limit=1000000&name=[name]-[hash].[ext]",
             exclude: /node_modules/
           },
           {
             test: /\.(woff|woff2)/,
-            loader: "url-loader?limit=10000&name=[name]-[hash].[ext]",
+            loader: "url-loader?limit=1000000&name=[name]-[hash].[ext]",
             exclude: /node_modules/
           },
           {
             test: /\.(ttf|eot)/,
-            loader: "file-loader?name=[name]-[hash].[ext]",
+            loader: "url-loader?limit=1000000?name=[name]-[hash].[ext]",
             exclude: /node_modules/
           }
         ])

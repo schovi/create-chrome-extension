@@ -5,6 +5,7 @@ import webpackDevServer from './dev-env/webpack.server';
 import yargs from 'yargs';
 import runSequence from 'run-sequence';
 import makeManifest from './dev-env/lib/make_manifest'
+import overrideHotUpdater from './dev-env/lib/override_hot_updater'
 
 const args = yargs
   .alias('p', 'production')
@@ -17,8 +18,13 @@ gulp.task('env', () => {
 
 // TODO better :)
 let scripts = []
+
 gulp.task('manifest', () => {
   scripts = makeManifest()
+});
+
+gulp.task('override_webpack', () => {
+  overrideHotUpdater()
 });
 
 gulp.task('webpack-production', function(done) {
@@ -37,7 +43,7 @@ gulp.task('webpack-local', (done) => {
   runSequence('webpack-dev', 'webpack-hot', done);
 });
 
-gulp.task('webpack', ['env', 'manifest', args.production ? 'webpack-production' : 'webpack-hot']);
+gulp.task('webpack', ['env', 'override_webpack', 'manifest', args.production ? 'webpack-production' : 'webpack-hot']);
 
 gulp.task('default', (done) => {
   runSequence('webpack', done);
