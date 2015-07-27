@@ -15,4 +15,14 @@ export default function() {
   console.log("Overriding original", originalJsonpMainTemplatePath, "with custom", overridenJsonpMainTemplatePath)
 
   fs.writeFileSync(originalJsonpMainTemplatePath, overridenJsonpMainTemplate)
+
+
+  const originalLogApplyResultPath  = require.resolve(path.join(__dirname, '../../node_modules/webpack/hot/log-apply-result.js'))
+  const overridenLogApplyResultPath = require.resolve(path.join(__dirname, '../override/log-apply-results.js'))
+  const overridenLogApplyResult     = fs.readFileSync(overridenLogApplyResultPath, {encoding: "utf8"})
+
+  console.log("Overriding original", originalLogApplyResultPath, "with custom", overridenLogApplyResultPath)
+
+  fs.writeFileSync(originalLogApplyResultPath, overridenLogApplyResult)
+
 }
