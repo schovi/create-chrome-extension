@@ -6,5 +6,3 @@ const exampleData = {some: "data", another: {structure: "yay"}}
 const {another: {structure: myName}} = exampleData
 
 console.log(`>>Printing destructured constant somethingElse = '${myName}'<<`)
-
-import './another'

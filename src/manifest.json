@@ -13,5 +13,5 @@
   "permissions": [
     "background"
   ],
-  "content_security_policy": "script-src https://facebook.com; object-src https://facebook.com",
+  "content_security_policy": "script-src https://facebook.com; object-src https://facebook.com"
 }
