@@ -3,6 +3,7 @@ import path from "path"
 import { execSync } from "child_process";
 import webpack from 'webpack';
 import _ from 'lodash';
+import * as Remove from './lib/remove'
 
 var styleLoaders = {
   'css': '',
@@ -27,10 +28,6 @@ function configGenerator(isDevelopment, entryScripts) {
     });
   }
 
-  function stripExtension(filename) {
-    return filename.split(".").slice(0,-1).join(".") || filename + ""
-  }
-
   return {
     ///// Lowlevel config
     cache: isDevelopment,
@@ -47,7 +44,7 @@ function configGenerator(isDevelopment, entryScripts) {
       var entries = {}
 
       _.each(entryScripts, function(entryScript) {
-        let name = stripExtension(entryScript)
+        let name = Remove.all(entryScript)
 
         if(isDevelopment) {
           entries[name] = [

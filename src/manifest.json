@@ -7,8 +7,11 @@
     }
   ],
   "background": {
-    "persistent": false,
+    "persistent": true,
     "scripts": ["background.js"]
+  },
+  "browser_action": {
+    "default_popup": "my_popup_menu.html"
   },
   "permissions": [
     "background"
