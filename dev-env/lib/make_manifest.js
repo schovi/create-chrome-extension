@@ -91,8 +91,8 @@ export default function() {
     const bodyContent = fs.readFileSync(path.resolve(path.join('src', bodyContentFilepath)), {encoding: "utf8"})
     const bareFilepath = Remove.extension(bodyContentFilepath)
     const jsFilepath = `${bareFilepath}.js`
-
-    const webpackScript = `<script src="http://localhost:3001/${Remove.path(jsFilepath)}" async defer></script>`;
+    const webpackScriptUrl = process.env.NODE_ENV == "development" ? `http://localhost:3001/${Remove.path(jsFilepath)}` : Remove.path(jsFilepath)
+    const webpackScript = `<script src="${webpackScriptUrl}" async defer></script>`;
 
     pushScriptName(jsFilepath)
 
