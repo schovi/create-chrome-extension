@@ -43,6 +43,9 @@ You should do this before editing any code to see how it works.
 - [ ] Solve Hot reload fix better than overriding file in /node_modules. It is really ugly and hacky :)
 - [ ] Create example repository with React app in content script (We already did that, so just create that repo :)
 - [ ] Test assets (images, fonts etc) and convert them into base64 into javascripts (including styles)
+- [ ] Reload extension after manifest and/or config file changed
+- [ ] Allow to define entry scripts other way than define them in manifest.json
+
 
 ## Licence
 
