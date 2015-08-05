@@ -10,7 +10,13 @@ import * as Remove from './remove';
 import makePopupLayout from './make_popup_layout';
 
 export default function() {
-  const buildPath = path.join(__dirname, '../../build');
+  let buildPath
+
+  if(process.env.NODE_END == "development") {
+    buildPath = path.join(__dirname, '../../build');
+  } else {
+    buildPath = path.join(__dirname, '../../release/build');
+  }
 
   // Prepare clear build
   rmrf(buildPath)

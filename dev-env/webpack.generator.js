@@ -78,7 +78,7 @@ function configGenerator(isDevelopment, entryScripts) {
         }
       } else {
         output = {
-          path: path.join(__dirname, "../build"),
+          path: path.join(__dirname, "../release/build"),
           filename: "[name].js"
         }
       }

@@ -1,3 +1,4 @@
+import path from 'path';
 import gulp from 'gulp';
 import configGenerator from './dev-env/webpack.generator';
 import webpackBuild from './dev-env/webpack.build';
@@ -6,6 +7,8 @@ import yargs from 'yargs';
 import runSequence from 'run-sequence';
 import makeManifest from './dev-env/lib/make_manifest'
 import overrideHotUpdater from './dev-env/lib/override_hot_updater'
+import { exec } from 'child_process'
+import clc from 'cli-color';
 
 const args = yargs
   .alias('p', 'production')
@@ -18,7 +21,6 @@ gulp.task('env', () => {
 
 // TODO better :)
 let scripts = []
-
 gulp.task('manifest', () => {
   scripts = makeManifest()
 });
@@ -43,10 +45,43 @@ gulp.task('webpack-local', (done) => {
   runSequence('webpack-dev', 'webpack-hot', done);
 });
 
-gulp.task('webpack', ['env', 'override_webpack', 'manifest', args.production ? 'webpack-production' : 'webpack-hot']);
+gulp.task('development', (done) => {
+  runSequence('webpack-hot', done)
+})
+
+gulp.task('extension', (done) => {
+  const productionBuildDir = path.join(__dirname, "release/build")
+  const chromeBinaryPath = '/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome'
+
+  setTimeout(() => {
+    console.log(clc.yellow(`Building extension into '${productionBuildDir}'`))
+    exec(`\$('${chromeBinaryPath}' --pack-extension=${productionBuildDir})`, (error, stdout, stderr) => {
+      console.log(clc.green('Done'));
+
+      if(stdout)
+        console.log(clc.yellow('stdout: ' + stdout));
+
+      if(stderr)
+        console.log(clc.red('stderr: ' + stderr));
+
+      if (error !== null)
+        console.log(clc.red('exec error: ' + error));
+
+      done()
+    })
+  }, 100)
+})
+
+gulp.task('production', (done) => {
+  runSequence('webpack-production', 'extension', done)
+})
+
+gulp.task('run', (done) => {
+  runSequence('env', 'override_webpack', 'manifest', args.production ?  'production' : 'development', done)
+});
 
 gulp.task('default', (done) => {
-  runSequence('webpack', done);
+  runSequence('run', done);
 });
 
 gulp.task('config', (done) => {
