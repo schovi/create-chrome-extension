@@ -1,6 +1,6 @@
 {
   "name": "WebpackChromeExtension",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Bootstrap playground for developing Chrome extensions with all new features like Webpack, Babel, React and almost everything you want.",
   "private": true,
   "scripts": {
