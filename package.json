@@ -23,7 +23,7 @@
     "gulp-util": "^3.0.6",
     "less": "^2.5.1",
     "less-loader": "^2.2.0",
-    "lodash": "^3.10.0",
+    "lodash": "^3.10.1",
     "node-libs-browser": "^0.5.2",
     "node-sass": "^3.2.0",
     "react": "^0.13.3",

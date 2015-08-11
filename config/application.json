@@ -1,0 +1,8 @@
+{
+  "development": {
+    "some_config": "123"
+  },
+  "production": {
+    "some_config": "456"
+  }
+}
