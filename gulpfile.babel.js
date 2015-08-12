@@ -1,3 +1,5 @@
+import rimraf from 'rimraf';
+import fs from 'fs';
 import path from 'path';
 import gulp from 'gulp';
 import configGenerator from './dev-env/webpack.generator';
@@ -9,6 +11,9 @@ import makeManifest from './dev-env/lib/make_manifest'
 import overrideHotUpdater from './dev-env/lib/override_hot_updater'
 import { exec } from 'child_process'
 import clc from 'cli-color';
+
+const releaseDir = path.join(__dirname, "release")
+const productionBuildDir = path.join(releaseDir, "build")
 
 const args = yargs
   .alias('p', 'production')
@@ -46,7 +51,7 @@ gulp.task('webpack-local', (done) => {
 });
 
 gulp.task('development', (done) => {
-  runSequence('webpack-hot', done)
+  runSequence('override_webpack', 'manifest', 'webpack-hot', done)
 })
 
 gulp.task('extension', (done) => {
@@ -69,21 +74,26 @@ gulp.task('extension', (done) => {
 
       done()
     })
-  }, 100)
+  // Long enought to prevent some unexpected errors
+  }, 1000)
+})
+
+gulp.task('prepare-release-dir', (done) => {
+  rimraf(releaseDir, () => {
+    fs.mkdir(releaseDir, () => {
+      done()
+    })
+  })
 })
 
 gulp.task('production', (done) => {
-  runSequence('webpack-production', 'extension', done)
+  runSequence('prepare-release-dir', 'manifest', 'webpack-production', 'extension', done)
 })
 
 gulp.task('run', (done) => {
-  runSequence('env', 'override_webpack', 'manifest', args.production ?  'production' : 'development', done)
+  runSequence('env', (args.production ?  'production' : 'development'), done)
 });
 
 gulp.task('default', (done) => {
   runSequence('run', done);
 });
-
-gulp.task('config', (done) => {
-  done()
-})

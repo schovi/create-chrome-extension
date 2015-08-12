@@ -12,7 +12,7 @@ import makePopupLayout from './make_popup_layout';
 export default function() {
   let buildPath
 
-  if(process.env.NODE_END == "development") {
+  if(process.env.NODE_ENV == "development") {
     buildPath = path.join(__dirname, '../../build');
   } else {
     buildPath = path.join(__dirname, '../../release/build');
