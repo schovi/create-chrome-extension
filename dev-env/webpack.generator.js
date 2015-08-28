@@ -6,6 +6,8 @@ import _ from 'lodash';
 import * as Remove from './lib/remove'
 import * as paths from './paths'
 
+// NOTE Style preprocessors
+// If you want to use any of style preprocessor, add related npm package + loader and uncomment following line
 var styleLoaders = {
   'css': '',
   // 'less': '!less-loader',
@@ -13,21 +15,22 @@ var styleLoaders = {
   // 'styl': '!stylus-loader'
 };
 
+function makeStyleLoaders() {
+  return Object.keys(styleLoaders).map(function(ext) {
+    // NOTE Enable autoprefixer loader
+    var prefix = 'css-loader?sourceMap&root=../assets'//!autoprefixer-loader?browsers=last 2 version';
+    var extLoaders = prefix + styleLoaders[ext];
+    var loader = 'style-loader!' + extLoaders;
+
+    return {
+      loader: loader,
+      test: new RegExp('\\.(' + ext + ')$'),
+      exclude: /node_modules/
+    };
+  });
+}
+
 function configGenerator(isDevelopment, entryScripts) {
-
-  function makeStyleLoaders() {
-    return Object.keys(styleLoaders).map(function(ext) {
-      var prefix = 'css-loader?sourceMap&root=../assets'//!autoprefixer-loader?browsers=last 2 version';
-      var extLoaders = prefix + styleLoaders[ext];
-      var loader = 'style-loader!' + extLoaders;
-
-      return {
-        loader: loader,
-        test: new RegExp('\\.(' + ext + ')$'),
-        exclude: /node_modules/
-      };
-    });
-  }
 
   return {
     ///// Lowlevel config
@@ -128,14 +131,14 @@ function configGenerator(isDevelopment, entryScripts) {
         ])
       }
 
-      // CUSTOM
+      // NOTE Custom plugins
       // if you need to exclude anything pro loading
       // plugins.push(new webpack.IgnorePlugin(/^(vertx|somethingelse)$/))
 
       return plugins;
     })(),
 
-    // CUSTOM
+    // NOTE Override external requires
     // If you need to change value of required (imported) module
     // for example if you dont want any module import 'net' for various reason like code only for non browser envirinment
     externals: {
@@ -143,13 +146,21 @@ function configGenerator(isDevelopment, entryScripts) {
     },
 
     resolve: {
-      extensions: ['', '.js', '.json'],
-      modulesDirectories: ['src', 'node_modules'],
+      extensions: [
+        '',
+        '.js',
+        '.jsx',
+        '.json'
+      ],
+      modulesDirectories: [
+        'src',
+        'node_modules'
+      ],
       root: [
         path.join(__dirname, "../src")
       ],
       alias: (function() {
-        // CUSTOM
+        // NOTE Aliasing
         // If you want to override some path with another. Good for importing same version of React across different libraries
         var alias = {
           // "react$": require.resolve(path.join(__dirname, '../node_modules/react')),
@@ -211,6 +222,10 @@ function configGenerator(isDevelopment, entryScripts) {
             exclude: /node_modules/
           }
         ])
+
+        // NOTE Custom loaders
+        // loaders = loaders.concat([...])
+
         return loaders
       })()
     }

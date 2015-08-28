@@ -31,7 +31,7 @@ module.exports = function(webpackConfig) {
       if (err) {
         console.log(err)
       } else {
-        console.log('Listening at ' + host + ':' + port);
+        console.log('Listening at https://' + host + ':' + port);
       }
 
       callback()

@@ -69,7 +69,7 @@ gulp.task('extension', (done) => {
       if(stderr)
         console.log(clc.red('stderr: ' + stderr));
 
-      if (error !== null)
+      if(error !== null)
         console.log(clc.red('exec error: ' + error));
 
       done()
