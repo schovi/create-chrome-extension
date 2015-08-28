@@ -1,19 +1,23 @@
 # Webpack Chrome extension
 
-Bootstrap playground for developing Chrome extensions with all javascript features like [NPM package manager](https://www.npmjs.com/), [Webpack](http://webpack.github.io/), [Babel](https://babeljs.io/), [React](https://facebook.github.io/react/) and almost everything you want.
+- Bootstrap project for developing any Chrome extensions.
+- Currently supports Backgrond, Popup, Content, Developing on **https** websites, Assets
+- With all javascript features like [NPM package manager](https://www.npmjs.com/), [Webpack](http://webpack.github.io/), [Babel](https://babeljs.io/), [React](https://facebook.github.io/react/) and almost everything you want.
 
 ## Installation
 
 1. `npm install`
 2. `npm install gulp -g`
+  - if there is problem with missing gulpfile, uninstall `npm uninstall gulp -g` and install again. You have probably old non-babel compatible version
 
 ## Usage
 
-You can do anything in src/ as you wish, except following:
-- Only javascripts directly in src/ can be used as entry points in your manifest.json
-- src/manifest.json is processed and updated by package.json (name, description and version) and scripts have to point into src/xxx.js
-
-If you want to change behaviour of development environment you can edit dev-env/ directory
+- Whole repository (package) is simple example extension.
+- Check `src/manifest.json` for basic usage of background script, content script and popup.
+- Background, content and popup informations are extracted and converted into development environment for extension.
+- Ofcourse they can be "compiled" into production extenstion crx file too.
+- Your codebase belongs only to `src` directory
+- In your scripts you can use **npm packages, babel, react (jsx), styles (with preprocessors) and any modern javascript feature** you know.
 
 ## How to run development environment
 
@@ -25,7 +29,11 @@ You should do this before editing any code to see how it works.
 4. click on `Load unpacked extension`
 5. add REPOSITORY_DIRECTORY/build
 6. Now you can check background script via link in extension `Inspect views: background page` and you will see some messages in console
-7. And open any http (not https) page and open development tools and console. You can see messages from content scripts.
+7. Navigate to any http or **https** page and open development tools and console. You can see messages from content scripts.
+8. Find extension icon (puzzle image) right from adress bar.
+  1. Click with left mouse button to show html content
+  2. Click with right mouse button and select `Inspect Popup`. Then in console you can see some messages
+9. You can edit your codebase with almost 100% hot/full reload support.
 
 ## How to build extension
 
@@ -41,11 +49,15 @@ You should do this before editing any code to see how it works.
 - [x] Make Hot reload works. There is problem with including hot reload chunks which are included via new script tag into DOM. new code is then eval in default (window) context and not in context of extension. Have to do same hack as you can see in injector files and download chunks via XMLHttpRequest.
 - [x] Move `config/manifest.json`, `util/make_injector.js` and `util/make_manifest.js` somewhere out of src to keep src in full will of developer
 - [x] Create extension from build process and move it into release/
+- [x] Test assets base64 support
+
+
+- [ ] Add asset example. Icon and some image into popup content
+- [ ] Allow to reload extension when popup html file changed
 - [ ] Detect Chrome path for building extension
-- [ ] Solve Hot reload fix better than overriding file in /node_modules. It is really ugly and hacky :)
-- [ ] Create example repository with React app in content script (We already did that, so just create that repo :)
-- [ ] Test assets (images, fonts etc) and convert them into base64 into javascripts (including styles)
-- [ ] Reload extension after manifest and/or config file changed
+- [ ] Solve Hot reload fix better than overriding file in /node_modules. It is really ugly and hacky
+- [ ] Create example repository with React app
+- [ ] Test assets without base64
 - [ ] Allow to define entry scripts other way than define them in manifest.json
 
 
