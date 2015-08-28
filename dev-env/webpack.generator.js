@@ -48,7 +48,7 @@ function configGenerator(isDevelopment, entryScripts) {
 
         if(isDevelopment) {
           entries[name] = [
-            'webpack-dev-server/client?http://localhost:3001',
+            'webpack-dev-server/client?https://localhost:3001',
             // Why only-dev-server instead of dev-server:
             // https://github.com/webpack/webpack/issues/418#issuecomment-54288041
             'webpack/hot/only-dev-server',
@@ -74,7 +74,7 @@ function configGenerator(isDevelopment, entryScripts) {
           path: path.join(__dirname, "../build"),
           filename: '[name].js',
           chunkFilename: '[name]-[chunkhash].js',
-          publicPath: 'http://localhost:3001/'
+          publicPath: 'https://localhost:3001/'
         }
       } else {
         output = {

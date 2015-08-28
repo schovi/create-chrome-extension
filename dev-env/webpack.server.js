@@ -7,8 +7,9 @@ module.exports = function(webpackConfig) {
 
   return function(callback) {
     new WebpackDevServer(webpack(webpackConfig), {
-      contentBase: 'http://localhost:3001',
+      contentBase: 'https://localhost:3001',
       publicPath: webpackConfig.output.publicPath,
+      https: true,
       // lazy: true,
       // watchDelay: 50,
       hot: true,

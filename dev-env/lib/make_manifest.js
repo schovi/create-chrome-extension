@@ -37,7 +37,7 @@ export default function() {
     }
 
     if(~csp.indexOf('script-src')) {
-      csp = csp.replace('script-src', "script-src 'self' 'unsafe-eval' http://localhost:3001")
+      csp = csp.replace('script-src', "script-src 'self' 'unsafe-eval' https://localhost:3001")
     } else {
       csp = `script-src 'self' 'unsafe-eval'; ${csp}`
     }
@@ -97,7 +97,7 @@ export default function() {
     const bodyContent = fs.readFileSync(path.resolve(path.join('src', bodyContentFilepath)), {encoding: "utf8"})
     const bareFilepath = Remove.extension(bodyContentFilepath)
     const jsFilepath = `${bareFilepath}.js`
-    const webpackScriptUrl = process.env.NODE_ENV == "development" ? `http://localhost:3001/${Remove.path(jsFilepath)}` : Remove.path(jsFilepath)
+    const webpackScriptUrl = process.env.NODE_ENV == "development" ? `https://localhost:3001/${Remove.path(jsFilepath)}` : Remove.path(jsFilepath)
     const webpackScript = `<script src="${webpackScriptUrl}" async defer></script>`;
 
     pushScriptName(jsFilepath)
