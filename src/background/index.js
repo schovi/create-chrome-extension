@@ -1,1 +1,3 @@
-console.log(">>Hello world from background script<<")
+import welcome from 'shared/welcome'
+
+welcome('background/index.js')

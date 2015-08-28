@@ -1,8 +1,3 @@
-console.log(">>Hello world from content scripts<<")
+import welcome from 'shared/welcome'
 
-// There we can use Babel features like destructuring
-const exampleData = {some: "data", another: {structure: "yay"}}
-
-const {another: {structure: myName}} = exampleData
-
-console.log(`>>Printing destructured constant somethingElse = '${myName}'<<`)
+welcome('background/index.js')
