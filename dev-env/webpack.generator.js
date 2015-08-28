@@ -193,7 +193,7 @@ function configGenerator(isDevelopment, entryScripts) {
         // Scripts
         loaders = loaders.concat([
           {
-            test: /\.js$/,
+            test: /\.jsx?$/,
             exclude: /node_modules/,
             loaders: isDevelopment ? [
               'react-hot', 'babel-loader'
