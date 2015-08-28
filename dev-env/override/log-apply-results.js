@@ -13,10 +13,15 @@ module.exports = function(updatedModules, renewedModules) {
 			console.warn("[HMR]  - " + moduleId);
 		});
 
-    // Schovi's 'module couldn't be hot updated' fixer
-    console.warn("[HMR] Processing full extension reload");
-    chrome.runtime.reload()
-    //////////// 
+		// Schovi's 'module couldn't be hot updated' fixer
+		// TODO when we are not in background script, wee can only reload page. Should it be auto?
+		if(chrome && chrome.runtime && chrome.runtime.reload) {
+			console.warn("[HMR] Processing full extension reload");
+			chrome.runtime.reload()
+		} else {
+			console.warn("[HMR] Can't proceed full reload. chrome.runtime.reload is not available");
+		}
+		////////////
 	}
 
 	if(!renewedModules || renewedModules.length === 0) {
