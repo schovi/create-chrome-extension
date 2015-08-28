@@ -203,6 +203,14 @@ function configGenerator(isDevelopment, entryScripts) {
           }
         ])
 
+        // Json
+        loaders = loaders.concat([
+          {
+            test: /\.json/,
+            loader: "json-loader",
+            exclude: /node_modules/
+          }
+        ])
         return loaders
       })()
     }
