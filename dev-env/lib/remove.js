@@ -11,3 +11,7 @@ export function path(filepath) {
 export function all(filepath) {
   return extension(path(filepath))
 }
+
+export function file(filepath) {
+  return filepath.split("/").slice(0,-1).join("/")
+}

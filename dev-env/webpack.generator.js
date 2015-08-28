@@ -4,6 +4,7 @@ import { execSync } from "child_process";
 import webpack from 'webpack';
 import _ from 'lodash';
 import * as Remove from './lib/remove'
+import * as paths from './paths'
 
 var styleLoaders = {
   'css': '',
@@ -44,22 +45,20 @@ function configGenerator(isDevelopment, entryScripts) {
       var entries = {}
 
       _.each(entryScripts, function(entryScript) {
-        let name = Remove.all(entryScript)
+        let name = Remove.extension(entryScript)
 
         if(isDevelopment) {
           entries[name] = [
             'webpack-dev-server/client?https://localhost:3001',
             // Why only-dev-server instead of dev-server:
             // https://github.com/webpack/webpack/issues/418#issuecomment-54288041
-            'webpack/hot/only-dev-server',
-            path.join(__dirname, "../src", entryScript)//,
-            // './override_hot_download_update_chunk',
+            'webpack/hot/only-dev-server'
           ]
         } else {
-          entries[name] = [
-            path.join(__dirname, "../src", entryScript)
-          ]
+          entries[name] = []
         }
+
+        entries[name].push(path.join(paths.src, entryScript))
       })
 
       return entries
