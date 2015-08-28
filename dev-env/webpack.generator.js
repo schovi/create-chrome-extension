@@ -7,9 +7,9 @@ import * as Remove from './lib/remove'
 
 var styleLoaders = {
   'css': '',
-  'less': '!less-loader',
-  'scss|sass': '!sass-loader',
-  'styl': '!stylus-loader'
+  // 'less': '!less-loader',
+  // 'scss|sass': '!sass-loader',
+  // 'styl': '!stylus-loader'
 };
 
 function configGenerator(isDevelopment, entryScripts) {
@@ -147,8 +147,7 @@ function configGenerator(isDevelopment, entryScripts) {
       extensions: ['', '.js', '.json'],
       modulesDirectories: ['src', 'node_modules'],
       root: [
-        path.join(__dirname, "../src/client/"),
-        path.join(__dirname, "../assets")
+        path.join(__dirname, "../src")
       ],
       alias: (function() {
         // CUSTOM

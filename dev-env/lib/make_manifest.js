@@ -4,7 +4,6 @@ import packageConfig from '../../package.json';
 import manifestSkelet from '../../src/manifest.json';
 import makeInjector from './make_injector';
 import _ from 'lodash';
-import rmrf from 'rmrf';
 import clc from 'cli-color';
 import * as Remove from './remove';
 import makePopupLayout from './make_popup_layout';
@@ -19,7 +18,7 @@ export default function() {
   }
 
   // Prepare clear build
-  rmrf(buildPath)
+  rimraf.sync(buildPath)
   fs.mkdirSync(buildPath)
 
   const values = _.pick(packageConfig, 'name', 'description', 'version');
