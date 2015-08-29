@@ -10,10 +10,12 @@
     "persistent": true,
     "scripts": ["background/index.js"]
   },
-  "browser_action": {
+  "page_action": {
+    "default_title": "Webpack chrome extension popup action",
     "default_popup": "popup/index.html"
   },
   "permissions": [
-    "background"
+    "background",
+    "tabs"
   ]
 }
