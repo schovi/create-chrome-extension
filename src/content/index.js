@@ -1,3 +1,3 @@
 import welcome from 'shared/welcome'
 
-welcome('background/index.js')
+welcome('content/index.js')
