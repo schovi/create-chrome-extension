@@ -4,6 +4,17 @@
 - Currently supports Backgrond, Popup, Content, Developing on **https** websites, Assets
 - With all javascript features like [NPM package manager](https://www.npmjs.com/), [Webpack](http://webpack.github.io/), [Babel](https://babeljs.io/), [React](https://facebook.github.io/react/) and almost everything you want.
 
+## Features support
+
+- [Browser action](https://developer.chrome.com/extensions/browserAction)
+- [Page action](https://developer.chrome.com/extensions/pageAction)
+- [Background Pages (Scripts)](https://developer.chrome.com/extensions/background_pages)
+  - Support both background scripts or page
+- [Content scripts](https://developer.chrome.com/extensions/content_scripts)
+  - Supports only scripts. Stylesheets can be easily made and use with webpack
+- [Override Pages](https://developer.chrome.com/extensions/override)
+  - You can customize **newtab**, **history**, or **bookmarks**
+
 ## Installation
 
 1. `npm install`
