@@ -99,7 +99,7 @@ export default function() {
     _.each(manifest.background.scripts, pushScriptName)
   }
 
-  // Process each script
+  // Process each script (create injectors)
   _.each(scripts, processScriptName)
 
 
@@ -136,6 +136,11 @@ export default function() {
     mkdirp.sync(Remove.file(fullHtmlPath))
 
     fs.writeFileSync(fullHtmlPath, popupHtml)
+  }
+
+  // Background page
+  if(manifest.background && manifest.background.page) {
+    procesHtmlPage(manifest.background.page)
   }
 
   // Browser action
