@@ -62,10 +62,11 @@ You should do this before editing any code to see how it works.
 - [x] Move `config/manifest.json`, `util/make_injector.js` and `util/make_manifest.js` somewhere out of src to keep src in full will of developer
 - [x] Create extension from build process and move it into release/
 - [x] Test assets base64 support
+- [x] Add asset example. Icon for actions
 
 #### Future
 
-- [ ] Add asset example. Icon and some image into popup content
+- [ ] Allow to have "static" files which will be merged into build
 - [ ] Allow to reload extension when popup html file changed
 - [ ] Detect Chrome path for building extension
 - [ ] Solve Hot reload fix better than overriding file in /node_modules. It is really ugly and hacky
