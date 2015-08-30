@@ -43,6 +43,7 @@ You should do this before editing any code to see how it works.
 
 ## TODO
 
+#### Done
 - [x] Make manifest.json dynamic based on package.json name, description, version.
 - [x] Move everything from build directory and leave it only for building development extenstion.
 - [x] Make production build. Replace injector scripts with final builded one.
@@ -51,6 +52,7 @@ You should do this before editing any code to see how it works.
 - [x] Create extension from build process and move it into release/
 - [x] Test assets base64 support
 
+#### Future
 
 - [ ] Add asset example. Icon and some image into popup content
 - [ ] Allow to reload extension when popup html file changed
