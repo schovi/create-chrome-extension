@@ -1,5 +1,6 @@
 {
   "manifest_version": 2,
+  "homepage_url": "https://github.com/schovi/webpack-chrome-extension",
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
