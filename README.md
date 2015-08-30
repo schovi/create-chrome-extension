@@ -1,10 +1,49 @@
 # Webpack Chrome extension
 
-- Bootstrap project for developing any Chrome extensions.
-- Currently supports Backgrond, Popup, Content, Developing on **https** websites, Assets
+Bootstrap project for developing any kind Chrome extensions.
+
+**Turn this**
+
+manifest.json
+```json
+{
+  "content_scripts": [{
+    "js": ["jquery.min.js", "jquery-spellchecker.min.js", "jquery-megamask.min.js", "jquery-scrolltie.min.js", "my-plugins.js", "app.js"],
+    "css": ["app.css"]
+  }],
+}
+```
+
+**Into this**
+
+manifest.json
+```json
+{"content_scripts": [{"js": ["app.js"]}]}
+```
+
+Run `npm install jquery jquery-spellchecker jquery-megamask jquery-scrolltie --save`
+
+app.js
+```js
+import 'jquery'
+import 'jquery-spellchecker'
+import 'jquery-megamask'
+import 'jquery-scrolltie'
+import './my-plugins'
+
+import "./app.css"
+
+// Here start my application
+$('input').spellchecker()
+
+```
+
+
+
+
 - With all javascript features like [NPM package manager](https://www.npmjs.com/), [Webpack](http://webpack.github.io/), [Babel](https://babeljs.io/), [React](https://facebook.github.io/react/) and almost everything you want.
 
-## Features support
+## Extension features support
 
 - [Browser action](https://developer.chrome.com/extensions/browserAction)
 - [Page action](https://developer.chrome.com/extensions/pageAction)
