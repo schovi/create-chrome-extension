@@ -1,6 +1,6 @@
 # Webpack Chrome extension
 
-Bootstrap project for developing any kind Chrome extensions.
+Bootstrap project for developing any kind Chrome extensions with all javascript features like [NPM packages](https://www.npmjs.com/), [Webpack](http://webpack.github.io/), [Babel](https://babeljs.io/), [React](https://facebook.github.io/react/) and almost everything you want.
 
 **Turn this**
 
@@ -10,7 +10,7 @@ manifest.json
   "content_scripts": [{
     "js": ["jquery.min.js", "jquery-spellchecker.min.js", "jquery-megamask.min.js", "jquery-scrolltie.min.js", "my-plugins.js", "app.js"],
     "css": ["app.css"]
-  }],
+  }]
 }
 ```
 
@@ -35,11 +35,7 @@ import "./app.css"
 
 // Here start my application
 $('input').spellchecker()
-
 ```
-
-With all javascript features like [NPM package manager](https://www.npmjs.com/), [Webpack](http://webpack.github.io/), [Babel](https://babeljs.io/), [React](https://facebook.github.io/react/) and almost everything you want.
-
 
 ## Extension features support
 
@@ -56,15 +52,15 @@ With all javascript features like [NPM package manager](https://www.npmjs.com/),
 
 1. `npm install`
 2. `npm install gulp -g`
-  - if there is problem with missing gulpfile, uninstall `npm uninstall gulp -g` and install again. You have probably old non-babel compatible version
+  - *if there is problem with missing gulpfile, uninstall `npm uninstall gulp -g` and install again. You have probably old non-babel compatible version*
 
 ## Usage
 
 - Whole repository (package) is simple example extension.
-- Check `src/manifest.json` for basic usage of background script, content script and popup.
-- Background, content and popup informations are extracted and converted into development environment for extension.
-- Ofcourse they can be "compiled" into production extenstion crx file too.
-- Your codebase belongs only to `src` directory
+- Check `src/manifest.json` for basic usage of background script, content script, action popup and chrome url overrides.
+- All scripts and/or html pages from manifest.json are piped through preprocessor and prepared for using all features.
+- When your extension does exactly what you want, you can run `gulp -p` for creating production `.crx` build.
+- All your codebase belongs only to `src/` directory
 - In your scripts you can use **npm packages, babel, react (jsx), styles (with preprocessors) and any modern javascript feature** you know.
 
 ## How to run development environment
