@@ -1,4 +1,4 @@
-import fs from 'fs';
+import fs from 'fs-extra';
 import path from 'path';
 import packageConfig from '../../package.json';
 import manifestSkelet from '../../src/manifest.json';
@@ -161,6 +161,15 @@ export default function() {
     overrides.newtab && procesHtmlPage(overrides.newtab)
   }
 
+    // create icons folder if icons specified in manifest.json
+    if (manifest.icons && Object.keys(manifest.icons).length) {
+      console.log(clc.green(`Making 'build/icons'`))
+      const sourceIconsPath = path.resolve(path.join('src', 'icons'));
+      const destIconsPath = path.join(buildPath, "icons");
+      // copies whole icons folder, sync method doesn't need callback
+      fs.copySync(sourceIconsPath, destIconsPath);
+
+    }
 
 
   // Writing build/manifest.json

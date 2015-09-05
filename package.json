@@ -17,6 +17,7 @@
     "cli-color": "^1.0.0",
     "css-loader": "^0.15.5",
     "file-loader": "^0.8.4",
+    "fs-extra": "^0.24.0",
     "gulp": "^3.9.0",
     "gulp-bg": "0.0.5",
     "gulp-eslint": "^0.15.0",
