@@ -99,6 +99,7 @@ You should do this before editing any code to see how it works.
 
 #### Future
 
+- [ ] Split webpack config into **core** and **user** parts. **Core** are necessary for working this whole thing and **user** are developer customs.
 - [ ] Allow to have "static" files which will be merged into build
 - [ ] Allow to reload extension when popup html file changed
 - [ ] Detect Chrome path for building extension
