@@ -107,7 +107,7 @@ You should do this before editing any code to see how it works.
 - [ ] Create example repository with React app
 - [ ] Test assets without base64
 - [ ] Allow to define entry scripts other way than define them in manifest.json
-
+- [ ] Add support for [extension updating](https://developer.chrome.com/extensions/packaging#update)
 
 ## Licence
 
