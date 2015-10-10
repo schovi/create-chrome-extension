@@ -1,19 +1,28 @@
-import rimraf from 'rimraf';
+// Native
 import fs from 'fs';
 import path from 'path';
+import { exec } from 'child_process'
+
+// npm
+import rimraf from 'rimraf';
+import clc from 'cli-color';
+import yargs from 'yargs';
+
+// gulp
 import gulp from 'gulp';
+import runSequence from 'run-sequence';
+
+// package
 import configGenerator from './dev-env/webpack.generator';
 import webpackBuild from './dev-env/webpack.build';
 import webpackDevServer from './dev-env/webpack.server';
-import yargs from 'yargs';
-import runSequence from 'run-sequence';
 import makeManifest from './dev-env/lib/make_manifest'
+import Manifest from './dev-env/lib/manifest'
 import overrideHotUpdater from './dev-env/lib/override_hot_updater'
-import { exec } from 'child_process'
-import clc from 'cli-color';
+import * as paths from './dev-env/paths'
 
-const releaseDir = path.join(__dirname, "release")
-const productionBuildDir = path.join(releaseDir, "build")
+
+// Program
 
 const args = yargs
   .alias('p', 'production')
@@ -24,9 +33,15 @@ gulp.task('env', () => {
   process.env.NODE_ENV = env; // eslint-disable-line no-undef
 });
 
+gulp.task('test-manifest', () => {
+  const watcher = new Manifest(paths.manifest)
+  watcher.watch()
+})
+
 // TODO better :)
 let scripts = []
 gulp.task('manifest', () => {
+  new Manifest(paths.manifest)
   scripts = makeManifest()
 });
 
@@ -55,12 +70,12 @@ gulp.task('development', (done) => {
 })
 
 gulp.task('extension', (done) => {
-  const productionBuildDir = path.join(__dirname, "release/build")
+  // TODO detect system and Chrome path
   const chromeBinaryPath = '/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome'
 
   setTimeout(() => {
-    console.log(clc.yellow(`Building extension into '${productionBuildDir}'`))
-    exec(`\$('${chromeBinaryPath}' --pack-extension=${productionBuildDir})`, (error, stdout, stderr) => {
+    console.log(clc.yellow(`Building extension into '${paths.releaseBuild}'`))
+    exec(`\$('${chromeBinaryPath}' --pack-extension=${paths.releaseBuild})`, (error, stdout, stderr) => {
       console.log(clc.green('Done'));
 
       if(stdout)
@@ -79,8 +94,8 @@ gulp.task('extension', (done) => {
 })
 
 gulp.task('prepare-release-dir', (done) => {
-  rimraf(releaseDir, () => {
-    fs.mkdir(releaseDir, () => {
+  rimraf(paths.release, () => {
+    fs.mkdir(paths.release, () => {
       done()
     })
   })

@@ -30,6 +30,50 @@ function makeStyleLoaders() {
   });
 }
 
+
+
+const SingleEntryPlugin = require("webpack/lib/SingleEntryPlugin");
+const MultiEntryPlugin = require("webpack/lib/MultiEntryPlugin");
+
+function DynamicEntries() {}
+
+DynamicEntries.prototype.apply = function(compiler) {
+
+  // let ctx
+
+  function itemToPlugin(item, name) {
+    if(Array.isArray(item))
+      return new MultiEntryPlugin(null, item, name);
+    else
+      return new SingleEntryPlugin(null, item, name);
+  }
+
+  // setTimeout(() => {
+    console.log("Add entry")
+    const name = 'content/index'
+    const item = [
+      'webpack-dev-server/client?https://localhost:3001',
+      'webpack/hot/only-dev-server',
+      '/Users/schovi/work/webpack-chrome-extension/src/content/index.js'
+    ]
+
+    const entryClass = itemToPlugin(item, name)
+
+    compiler.apply(entryClass)
+  // }, 2000)
+
+
+  compiler.plugin("entry-option", function(context) {
+    // ctx = context
+
+    compiler.plugin("make", function(compilation, callback) {
+      console.log("make")
+      callback()
+    }.bind(this));
+  })
+};
+
+
 function configGenerator(isDevelopment, entryScripts) {
 
   return {
@@ -47,22 +91,22 @@ function configGenerator(isDevelopment, entryScripts) {
     entry: (function() {
       var entries = {}
 
-      _.each(entryScripts, function(entryScript) {
-        let name = Remove.extension(entryScript)
-
-        if(isDevelopment) {
-          entries[name] = [
-            'webpack-dev-server/client?https://localhost:3001',
-            // Why only-dev-server instead of dev-server:
-            // https://github.com/webpack/webpack/issues/418#issuecomment-54288041
-            'webpack/hot/only-dev-server'
-          ]
-        } else {
-          entries[name] = []
-        }
-
-        entries[name].push(path.join(paths.src, entryScript))
-      })
+      // _.each(entryScripts, function(entryScript) {
+      //   let name = Remove.extension(entryScript)
+      //
+      //   if(isDevelopment) {
+      //     entries[name] = [
+      //       'webpack-dev-server/client?https://localhost:3001',
+      //       // Why only-dev-server instead of dev-server:
+      //       // https://github.com/webpack/webpack/issues/418#issuecomment-54288041
+      //       'webpack/hot/only-dev-server'
+      //     ]
+      //   } else {
+      //     entries[name] = []
+      //   }
+      //
+      //   entries[name].push(path.join(paths.src, entryScript))
+      // })
 
       return entries
     })(),
@@ -84,12 +128,14 @@ function configGenerator(isDevelopment, entryScripts) {
           filename: "[name].js"
         }
       }
+
       return output
     })(),
 
     // Plugins
     plugins: (function() {
       let plugins = [
+        new DynamicEntries(),
         new webpack.DefinePlugin({
           "global.GENTLY": false,
           "process.env": {

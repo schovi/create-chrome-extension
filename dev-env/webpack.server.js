@@ -16,7 +16,8 @@ module.exports = function(webpackConfig) {
       // Unfortunately quiet swallows everything even error so it can't be used.
       quiet: false,
       // No info filters only initial compilation it seems.
-      noInfo: true,
+      noInfo: false,
+      // noInfo: true,
       // Remove console.log mess during watch.
       stats: {
         // assets: false,
