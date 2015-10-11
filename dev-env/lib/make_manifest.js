@@ -110,7 +110,7 @@ export default function() {
   // TODO reload extension when popup html changed. it was developed for use with react,
   // which allow us to make layout changes hot reloaded automaticaly
 
-  const procesHtmlPage = function(htmlFilepath) {
+  const processHtmlPage = function(htmlFilepath) {
     console.log(clc.green(`Making 'build/${htmlFilepath}'`))
 
     // Read body content
@@ -140,25 +140,25 @@ export default function() {
 
   // Background page
   if(manifest.background && manifest.background.page) {
-    procesHtmlPage(manifest.background.page)
+    processHtmlPage(manifest.background.page)
   }
 
   // Browser action
-  manifest.browser_action && manifest.browser_action.default_popup && procesHtmlPage(manifest.browser_action.default_popup)
+  manifest.browser_action && manifest.browser_action.default_popup && processHtmlPage(manifest.browser_action.default_popup)
 
   // Page action
-  manifest.page_action && manifest.page_action.default_popup && procesHtmlPage(manifest.page_action.default_popup)
+  manifest.page_action && manifest.page_action.default_popup && processHtmlPage(manifest.page_action.default_popup)
 
   // Chrome page overrides
   const overrides = manifest.chrome_url_overrides
 
   if(overrides) {
     // Bookmarks page
-    overrides.bookmarks && procesHtmlPage(overrides.bookmarks)
+    overrides.bookmarks && processHtmlPage(overrides.bookmarks)
     // History page
-    overrides.history && procesHtmlPage(overrides.history)
+    overrides.history && processHtmlPage(overrides.history)
     // Newtab page
-    overrides.newtab && procesHtmlPage(overrides.newtab)
+    overrides.newtab && processHtmlPage(overrides.newtab)
   }
 
     // create icons folder if icons specified in manifest.json
