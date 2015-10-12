@@ -146,9 +146,9 @@ export default function() {
     // Get just path and name ie: 'popup/index'
     const bareFilepath = Remove.extension(htmlFilepath)
 
-    const scriptFilepath = `${bareFilepath}.js`
+    const scriptFilepath = `/${bareFilepath}.js`
 
-    const webpackScriptUrl = process.env.NODE_ENV == "development" ? path.join("https://localhost:3001/", scriptFilepath) : scriptFilepath
+    const webpackScriptUrl = process.env.NODE_ENV == "development" ? path.join("https://localhost:3001", scriptFilepath) : scriptFilepath
     const webpackScript = `<script src="${webpackScriptUrl}" async defer></script>`;
 
     pushScriptName(scriptFilepath)
