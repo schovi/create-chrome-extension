@@ -53,6 +53,33 @@ export default function() {
   }
 
   //////////
+  // Assets
+  const buildAssetsDir = "$assets"
+  let buildAssetDirCreated = false
+
+  const processAsset = function(object, key) {
+    const assetPath = object[key]
+
+    console.log(clc.yellow(`Processing asset '${assetPath}'`))
+
+    if(!buildAssetDirCreated) {
+      mkdirp.sync(path.join(buildPath, buildAssetsDir))
+      buildAssetDirCreated = true
+    }
+
+    const assetSrcPath = path.join(paths.src, assetPath)
+    const buildAssetPath = path.join(buildAssetsDir, Remove.path(assetPath))
+    const assetDestPath = path.join(buildPath, buildAssetPath)
+
+    fs.copySync(assetSrcPath, assetDestPath)
+
+    object[key] = buildAssetPath
+
+    console.log(clc.green(`Done`))
+    return true
+  }
+
+  //////////
   // Prepare background, content and popup injectors
   const scripts = [];
 
@@ -161,16 +188,10 @@ export default function() {
     overrides.newtab && procesHtmlPage(overrides.newtab)
   }
 
-    // create icons folder if icons specified in manifest.json
-    if (manifest.icons && Object.keys(manifest.icons).length) {
-      console.log(clc.green(`Making 'build/icons'`))
-      const sourceIconsPath = path.resolve(path.join('src', 'icons'));
-      const destIconsPath = path.join(buildPath, "icons");
-      // copies whole icons folder, sync method doesn't need callback
-      fs.copySync(sourceIconsPath, destIconsPath);
-
-    }
-
+  // create icons folder if icons specified in manifest.json
+  if (manifest.icons && Object.keys(manifest.icons).length) {
+    _.forEach(manifest.icons, (iconPath, name) => processAsset(manifest.icons, name))
+  }
 
   // Writing build/manifest.json
   const manifestPath = path.join(buildPath, "manifest.json");
