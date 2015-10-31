@@ -1,7 +1,12 @@
+import * as log from '../log'
+
 //////////
 // CSP. Fix Content security policy to allow eval webpack scripts in development mode
 export default function(manifest) {
+  log.pending("Processing CSP")
+
   if(process.env.NODE_ENV == 'development') {
+
     let csp = manifest["content_security_policy"] || ""
 
     const objectSrc = "object-src 'self'"
@@ -22,7 +27,11 @@ export default function(manifest) {
     }
 
     manifest["content_security_policy"] = csp
+
+    log.done("Done")
+  } else {
+    log.done("Skipped in production environment")
   }
 
-  return manifest
+  return {manifest}
 }

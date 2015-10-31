@@ -3,8 +3,9 @@ import path from "path"
 import { execSync } from "child_process";
 import webpack from 'webpack';
 import _ from 'lodash';
-import * as Remove from './lib/remove'
+import * as Remove from './remove'
 import * as paths from './paths'
+import ManifestPlugin from './manifest/plugin'
 
 // NOTE Style preprocessors
 // If you want to use any of style preprocessor, add related npm package + loader and uncomment following line
@@ -30,51 +31,7 @@ function makeStyleLoaders() {
   });
 }
 
-
-
-const SingleEntryPlugin = require("webpack/lib/SingleEntryPlugin");
-const MultiEntryPlugin = require("webpack/lib/MultiEntryPlugin");
-
-function DynamicEntries() {}
-
-DynamicEntries.prototype.apply = function(compiler) {
-
-  // let ctx
-
-  function itemToPlugin(item, name) {
-    if(Array.isArray(item))
-      return new MultiEntryPlugin(null, item, name);
-    else
-      return new SingleEntryPlugin(null, item, name);
-  }
-
-  // setTimeout(() => {
-    console.log("Add entry")
-    const name = 'content/index'
-    const item = [
-      'webpack-dev-server/client?https://localhost:3001',
-      'webpack/hot/only-dev-server',
-      '/Users/schovi/work/webpack-chrome-extension/src/content/index.js'
-    ]
-
-    const entryClass = itemToPlugin(item, name)
-
-    compiler.apply(entryClass)
-  // }, 2000)
-
-
-  compiler.plugin("entry-option", function(context) {
-    // ctx = context
-
-    compiler.plugin("make", function(compilation, callback) {
-      console.log("make")
-      callback()
-    }.bind(this));
-  })
-};
-
-
-function configGenerator(isDevelopment, entryScripts) {
+function configGenerator(isDevelopment, Manifest) {
 
   return {
     ///// Lowlevel config
@@ -88,28 +45,7 @@ function configGenerator(isDevelopment, entryScripts) {
 
     // Entry points in your app
     // There we use scripts from your manifest.json
-    entry: (function() {
-      var entries = {}
-
-      // _.each(entryScripts, function(entryScript) {
-      //   let name = Remove.extension(entryScript)
-      //
-      //   if(isDevelopment) {
-      //     entries[name] = [
-      //       'webpack-dev-server/client?https://localhost:3001',
-      //       // Why only-dev-server instead of dev-server:
-      //       // https://github.com/webpack/webpack/issues/418#issuecomment-54288041
-      //       'webpack/hot/only-dev-server'
-      //     ]
-      //   } else {
-      //     entries[name] = []
-      //   }
-      //
-      //   entries[name].push(path.join(paths.src, entryScript))
-      // })
-
-      return entries
-    })(),
+    entry: {},
 
     // Output
     output: (function() {
@@ -117,14 +53,14 @@ function configGenerator(isDevelopment, entryScripts) {
 
       if(isDevelopment) {
         output = {
-          path: path.join(__dirname, "../build"),
+          path: paths.build,
           filename: '[name].js',
           chunkFilename: '[name]-[chunkhash].js',
           publicPath: 'https://localhost:3001/'
         }
       } else {
         output = {
-          path: path.join(__dirname, "../release/build"),
+          path: paths.releaseBuild,
           filename: "[name].js"
         }
       }
@@ -135,7 +71,8 @@ function configGenerator(isDevelopment, entryScripts) {
     // Plugins
     plugins: (function() {
       let plugins = [
-        new DynamicEntries(),
+        new webpack.optimize.OccurenceOrderPlugin(),
+        new ManifestPlugin(Manifest, isDevelopment),
         new webpack.DefinePlugin({
           "global.GENTLY": false,
           "process.env": {
@@ -163,7 +100,6 @@ function configGenerator(isDevelopment, entryScripts) {
             }
           }),
           new webpack.optimize.DedupePlugin(),
-          new webpack.optimize.OccurenceOrderPlugin(),
           // new webpack.optimize.LimitChunkCountPlugin({maxChunks: 15}),
           // new webpack.optimize.MinChunkSizePlugin({minChunkSize: 10000}),
           function() {

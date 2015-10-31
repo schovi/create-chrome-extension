@@ -16,8 +16,7 @@ import runSequence from 'run-sequence';
 import configGenerator from './dev-env/webpack.generator';
 import webpackBuild from './dev-env/webpack.build';
 import webpackDevServer from './dev-env/webpack.server';
-import makeManifest from './dev-env/lib/make_manifest'
-import Manifest from './dev-env/lib/manifest'
+import Manifest from './dev-env/manifest'
 import overrideHotUpdater from './dev-env/lib/override_hot_updater'
 import * as paths from './dev-env/paths'
 
@@ -33,16 +32,16 @@ gulp.task('env', () => {
   process.env.NODE_ENV = env; // eslint-disable-line no-undef
 });
 
-gulp.task('test-manifest', () => {
-  const watcher = new Manifest(paths.manifest)
-  watcher.watch()
-})
+// gulp.task('test-manifest', () => {
+//   const watcher = new Manifest(paths.manifest)
+//   watcher.watch()
+// })
 
-// TODO better :)
-let scripts = []
+let manifest
+
 gulp.task('manifest', () => {
-  new Manifest(paths.manifest)
-  scripts = makeManifest()
+  manifest = new Manifest(paths.manifest)
+  manifest.run()
 });
 
 gulp.task('override_webpack', () => {
@@ -50,15 +49,15 @@ gulp.task('override_webpack', () => {
 });
 
 gulp.task('webpack-production', function(done) {
-  return webpackBuild(configGenerator(false, scripts))(done)
+  return webpackBuild(configGenerator(false, manifest))(done)
 });
 
 gulp.task('webpack-hot', function(done) {
-  return webpackDevServer(configGenerator(true, scripts))(done)
+  return webpackDevServer(configGenerator(true, manifest))(done)
 });
 
 gulp.task('webpack-dev', function(done) {
-  return webpackBuild(configGenerator(true, scripts))(done)
+  return webpackBuild(configGenerator(true, manifest))(done)
 });
 
 gulp.task('webpack-local', (done) => {
