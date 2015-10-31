@@ -1,4 +1,4 @@
-import fs from 'fs';
+import fs from 'fs-extra';
 import path from 'path';
 import packageConfig from '../../package.json';
 import manifestSkelet from '../../src/manifest.json';
@@ -50,6 +50,33 @@ export default function() {
     }
 
     manifest["content_security_policy"] = csp
+  }
+
+  //////////
+  // Assets
+  const buildAssetsDir = "$assets"
+  let buildAssetDirCreated = false
+
+  const processAsset = function(object, key) {
+    const assetPath = object[key]
+
+    console.log(clc.yellow(`Processing asset '${assetPath}'`))
+
+    if(!buildAssetDirCreated) {
+      mkdirp.sync(path.join(buildPath, buildAssetsDir))
+      buildAssetDirCreated = true
+    }
+
+    const assetSrcPath = path.join(paths.src, assetPath)
+    const buildAssetPath = path.join(buildAssetsDir, Remove.path(assetPath))
+    const assetDestPath = path.join(buildPath, buildAssetPath)
+
+    fs.copySync(assetSrcPath, assetDestPath)
+
+    object[key] = buildAssetPath
+
+    console.log(clc.green(`Done`))
+    return true
   }
 
   //////////
@@ -110,7 +137,7 @@ export default function() {
   // TODO reload extension when popup html changed. it was developed for use with react,
   // which allow us to make layout changes hot reloaded automaticaly
 
-  const procesHtmlPage = function(htmlFilepath) {
+  const processHtmlPage = function(htmlFilepath) {
     console.log(clc.green(`Making 'build/${htmlFilepath}'`))
 
     // Read body content
@@ -121,7 +148,7 @@ export default function() {
 
     const scriptFilepath = `${bareFilepath}.js`
 
-    const webpackScriptUrl = process.env.NODE_ENV == "development" ? path.join("https://localhost:3001/", scriptFilepath) : scriptFilepath
+    const webpackScriptUrl = process.env.NODE_ENV == "development" ? path.join("https://localhost:3001", scriptFilepath) : `/${scriptFilepath}`
     const webpackScript = `<script src="${webpackScriptUrl}" async defer></script>`;
 
     pushScriptName(scriptFilepath)
@@ -140,28 +167,31 @@ export default function() {
 
   // Background page
   if(manifest.background && manifest.background.page) {
-    procesHtmlPage(manifest.background.page)
+    processHtmlPage(manifest.background.page)
   }
 
   // Browser action
-  manifest.browser_action && manifest.browser_action.default_popup && procesHtmlPage(manifest.browser_action.default_popup)
+  manifest.browser_action && manifest.browser_action.default_popup && processHtmlPage(manifest.browser_action.default_popup)
 
   // Page action
-  manifest.page_action && manifest.page_action.default_popup && procesHtmlPage(manifest.page_action.default_popup)
+  manifest.page_action && manifest.page_action.default_popup && processHtmlPage(manifest.page_action.default_popup)
 
   // Chrome page overrides
   const overrides = manifest.chrome_url_overrides
 
   if(overrides) {
     // Bookmarks page
-    overrides.bookmarks && procesHtmlPage(overrides.bookmarks)
+    overrides.bookmarks && processHtmlPage(overrides.bookmarks)
     // History page
-    overrides.history && procesHtmlPage(overrides.history)
+    overrides.history && processHtmlPage(overrides.history)
     // Newtab page
-    overrides.newtab && procesHtmlPage(overrides.newtab)
+    overrides.newtab && processHtmlPage(overrides.newtab)
   }
 
-
+  // create icons folder if icons specified in manifest.json
+  if (manifest.icons && Object.keys(manifest.icons).length) {
+    _.forEach(manifest.icons, (iconPath, name) => processAsset(manifest.icons, name))
+  }
 
   // Writing build/manifest.json
   const manifestPath = path.join(buildPath, "manifest.json");
