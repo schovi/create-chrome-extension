@@ -70,7 +70,7 @@ export default class Manifest {
     return true
   }
 
-  applyProcessorResult({manifest, scripts}) {
+  applyProcessorResult({manifest, scripts} = {}) {
     if(manifest)
       this.manifest = manifest
 
