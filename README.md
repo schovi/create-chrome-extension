@@ -18,7 +18,11 @@ manifest.json
 
 manifest.json
 ```json
-{"content_scripts": [{"js": ["app.js"]}]}
+{
+  "content_scripts": [{
+    "js": ["app.js"]
+  }]
+}
 ```
 
 Run `npm install jquery jquery-spellchecker jquery-megamask jquery-scrolltie --save`
@@ -100,9 +104,11 @@ You should do this before editing any code to see how it works.
 - [x] Create extension from build process and move it into release/
 - [x] Test assets base64 support
 - [x] Add asset example. Icon for actions
+- [x] Drop gulp
 
 #### Future
 
+- [ ] Experiment with hot middleware (hints in NOTE.md)
 - [ ] Split webpack config into **core** and **user** parts. **Core** are necessary for working this whole thing and **user** are developer customs.
 - [ ] Allow to have "static" files which will be merged into build
 - [ ] Allow to reload extension when popup html file changed
