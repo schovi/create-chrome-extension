@@ -2,7 +2,6 @@ import fs from 'fs'
 import path from 'path'
 // import chokidar from 'chokidar'
 import rimraf from 'rimraf';
-import mkdirp from 'mkdirp'
 
 import processors from './processors'
 import * as log from './log'
@@ -34,11 +33,7 @@ export default class Manifest {
   // }
 
   prepareBuildDir() {
-    if(process.env.NODE_ENV == "development") {
-      this.buildPath = paths.build
-    } else {
-      this.buildPath = paths.releaseBuild
-    }
+    this.buildPath = paths.build
 
     // Prepare clear build
     rimraf.sync(this.buildPath)

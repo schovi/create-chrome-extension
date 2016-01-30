@@ -51,8 +51,7 @@ $('input').spellchecker()
 ## Installation
 
 1. `npm install`
-2. `npm install gulp -g`
-  - *if there is problem with missing gulpfile, uninstall `npm uninstall gulp -g` and install again. You have probably old non-babel compatible version*
+2. Thats all :)
 
 ## Usage
 
@@ -67,7 +66,7 @@ $('input').spellchecker()
 
 You should do this before editing any code to see how it works.
 
-1. run `gulp` which will start webpack-dev-server
+1. run `npm start` (or `npm run dev`) which will start webpack-dev-server
 2. in Chrome open `chrome://extensions/`
 3. check `Developer mode`
 4. click on `Load unpacked extension`
@@ -81,9 +80,14 @@ You should do this before editing any code to see how it works.
 
 ## How to build extension
 
-1. run `gulp -p`
+1. run `npm run build`
 2. It will compile scripts, styles and other assets into release/build/
 3. It will make chrome extension into release/build.crx with certificate release/build.pem
+
+## Troubleshoting
+
+1. Everything looks fine, but scripts from webpack arent loading.
+  - Probably problem with development ssl certificates. Open any script (i.e. https://localhost:3001/background/index.js) in separate tab and allow chrome to load it anyway. Then reload extension.
 
 ## TODO
 

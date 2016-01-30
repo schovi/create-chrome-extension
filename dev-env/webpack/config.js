@@ -3,9 +3,9 @@ import path from "path"
 import { execSync } from "child_process";
 import webpack from 'webpack';
 import _ from 'lodash';
-import * as Remove from './remove'
-import * as paths from './paths'
-import ManifestPlugin from './manifest/plugin'
+import * as Remove from '../util/remove'
+import * as paths from '../paths'
+import ManifestPlugin from '../manifest/plugin'
 
 // NOTE Style preprocessors
 // If you want to use any of style preprocessor, add related npm package + loader and uncomment following line
@@ -31,7 +31,9 @@ function makeStyleLoaders() {
   });
 }
 
-function configGenerator(isDevelopment, Manifest) {
+function configGenerator(Manifest) {
+
+  var isDevelopment = process.env.NODE_ENV != "production"
 
   return {
     ///// Lowlevel config
@@ -49,20 +51,14 @@ function configGenerator(isDevelopment, Manifest) {
 
     // Output
     output: (function() {
-      var output;
+      var output = {
+        path: paths.build,
+        filename: '[name].js'
+      }
 
       if(isDevelopment) {
-        output = {
-          path: paths.build,
-          filename: '[name].js',
-          chunkFilename: '[name]-[chunkhash].js',
-          publicPath: 'https://localhost:3001/'
-        }
-      } else {
-        output = {
-          path: paths.releaseBuild,
-          filename: "[name].js"
-        }
+        output.chunkFilename = '[name]-[chunkhash].js'
+        output.publicPath = 'https://localhost:3001/'
       }
 
       return output
@@ -134,23 +130,22 @@ function configGenerator(isDevelopment, Manifest) {
         '.jsx',
         '.json'
       ],
+
+      // NOTE where webpack resolve modules
       modulesDirectories: [
         'src',
         'node_modules'
       ],
+
       root: [
         path.join(__dirname, "../src")
       ],
-      alias: (function() {
-        // NOTE Aliasing
-        // If you want to override some path with another. Good for importing same version of React across different libraries
-        var alias = {
-          // "react$": require.resolve(path.join(__dirname, '../node_modules/react')),
-          // "react/addons$": require.resolve(path.join(__dirname, '../node_modules/react/addons'))
-        }
 
-        return alias;
-      })()
+      // NOTE Aliasing
+      // If you want to override some path with another. Good for importing same version of React across different libraries
+      alias: {
+        // "react$": require.resolve(path.join(__dirname, '../../node_modules/react'))
+      }
     },
 
     // Loaders
@@ -188,11 +183,7 @@ function configGenerator(isDevelopment, Manifest) {
           {
             test: /\.jsx?$/,
             exclude: /node_modules/,
-            loaders: isDevelopment ? [
-              'react-hot', 'babel-loader'
-            ] : [
-              'babel-loader'
-            ]
+            loader: "babel-loader"
           }
         ])
 
@@ -200,8 +191,8 @@ function configGenerator(isDevelopment, Manifest) {
         loaders = loaders.concat([
           {
             test: /\.json/,
-            loader: "json-loader",
-            exclude: /node_modules/
+            exclude: /node_modules/,
+            loader: "json-loader"
           }
         ])
 

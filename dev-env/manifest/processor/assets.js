@@ -1,11 +1,10 @@
 import fs from 'fs-extra'
 import path from 'path'
 import _ from 'lodash'
-import mkdirp from 'mkdirp'
 
 import * as paths from '../../paths'
 import * as log from '../log'
-import * as Remove from '../../remove';
+import * as Remove from '../../util/remove';
 
 const buildAssetsDir = "$assets"
 
@@ -19,10 +18,11 @@ const processAsset = function(object, key, buildPath) {
   try {
     const buildAssetsDirStats = fs.lstatSync(buildAssetsDirPath);
 
-    if(!buildAssetsDirStats.isDirectory())
-      mkdirp.sync(buildAssetsDirPath)
+    if(!buildAssetsDirStats.isDirectory()) {
+      fs.mkdirsSync(buildAssetsDirPath)
+    }
   } catch(ex) {
-    mkdirp.sync(buildAssetsDirPath)
+    fs.mkdirsSync(buildAssetsDirPath)
   }
 
   const assetSrcPath = path.join(paths.src, assetPath)

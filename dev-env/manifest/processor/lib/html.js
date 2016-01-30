@@ -1,10 +1,9 @@
-import fs from 'fs'
 import path from 'path'
-import mkdirp from 'mkdirp'
+import fs from 'fs-extra'
 
 import * as log from '../../log'
 import script from './script'
-import * as Remove from '../../../remove';
+import * as Remove from '../../../util/remove';
 
 const makeLayout = function({script, body}) {
   return (
@@ -45,7 +44,7 @@ export default function(htmlFilepath, buildPath) {
 
   const fullHtmlPath = path.join(buildPath, htmlFilepath)
 
-  mkdirp.sync(Remove.file(fullHtmlPath))
+  fs.mkdirsSync(Remove.file(fullHtmlPath))
 
   fs.writeFileSync(fullHtmlPath, html)
 

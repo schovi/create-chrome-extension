@@ -1,6 +1,6 @@
 import SingleEntryPlugin from "webpack/lib/SingleEntryPlugin"
 import MultiEntryPlugin from "webpack/lib/MultiEntryPlugin"
-import * as Remove from '../remove'
+import * as Remove from '../util/remove'
 
 export default class ManifestPlugin {
   constructor(Manifest, isDevelopment = true) {
