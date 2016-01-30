@@ -8,7 +8,7 @@ import * as paths from './paths'
 overrideHotUpdater()
 
 // Create manifest
-const manifest = new Manifest(paths.manifest)
+const manifest = new Manifest({manifest: paths.manifest, build: paths.build})
 manifest.run()
 
 // Start webpack dev server

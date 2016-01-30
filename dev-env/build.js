@@ -16,7 +16,7 @@ fs.removeSync(paths.release)
 fs.mkdirSync(paths.release)
 
 // Create manifest
-const manifest = new Manifest(paths.manifest)
+const manifest = new Manifest({manifest: paths.manifest, build: paths.build})
 manifest.run()
 
 // Build webpack

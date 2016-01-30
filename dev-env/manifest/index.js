@@ -1,15 +1,14 @@
-import fs from 'fs'
+import fs from 'fs-extra'
 import path from 'path'
 // import chokidar from 'chokidar'
-import rimraf from 'rimraf';
 
 import processors from './processors'
 import * as log from './log'
-import * as paths from '../paths'
 
 export default class Manifest {
-  constructor(path) {
-    this.path = path
+  constructor({ manifest, build }) {
+    this.manifestPath = manifest
+    this.buildPath    = build
   }
 
   run() {
@@ -33,10 +32,8 @@ export default class Manifest {
   // }
 
   prepareBuildDir() {
-    this.buildPath = paths.build
-
     // Prepare clear build
-    rimraf.sync(this.buildPath)
+    fs.removeSync(this.buildPath)
     fs.mkdirSync(this.buildPath)
   }
 
@@ -48,7 +45,7 @@ export default class Manifest {
   }
 
   loadManifest() {
-    return JSON.parse(fs.readFileSync(this.path, 'utf8'))
+    return JSON.parse(fs.readFileSync(this.manifestPath, 'utf8'))
   }
 
   processManifest() {
