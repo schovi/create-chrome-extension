@@ -3,9 +3,9 @@ import MultiEntryPlugin from "webpack/lib/MultiEntryPlugin"
 import * as Remove from '../util/remove'
 
 export default class ManifestPlugin {
-  constructor(Manifest, isDevelopment = true) {
+  constructor(Manifest) {
     this.Manifest = Manifest
-    this.isDevelopment = isDevelopment
+    this.isDevelopment = process.env.NODE_ENV != "production"
   }
 
   apply(compiler) {

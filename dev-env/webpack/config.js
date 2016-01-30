@@ -68,7 +68,7 @@ function configGenerator(Manifest) {
     plugins: (function() {
       let plugins = [
         new webpack.optimize.OccurenceOrderPlugin(),
-        new ManifestPlugin(Manifest, isDevelopment),
+        new ManifestPlugin(Manifest),
         new webpack.DefinePlugin({
           "global.GENTLY": false,
           "process.env": {
