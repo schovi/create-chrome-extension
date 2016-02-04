@@ -27,8 +27,8 @@ building.then(() => {
   console.error(clc.green("Building done"))
 
   // Build extension
-  // TODO detect system and Chrome path
-  const chromeBinaryPath = '/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome'
+  // TODO try detect system and Chrome path. Default is OSX :)
+  const chromeBinaryPath = process.env.CHROME_BIN || '/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome'
 
   console.log(clc.yellow(`Packing extension into '${paths.build}'`))
   exec(`\$('${chromeBinaryPath}' --pack-extension=${paths.build})`, (error, stdout, stderr) => {
