@@ -5,8 +5,8 @@
   "private": true,
   "scripts": {
     "start": "npm run dev",
-    "dev": "NODE_ENV=development ./node_modules/.bin/babel-node ./dev-env/dev.js",
-    "build": "NODE_ENV=production ./node_modules/.bin/babel-node ./dev-env/build.js"
+    "dev": "cross-env NODE_ENV=development babel-node ./dev-env/dev.js",
+    "build": "cross-env NODE_ENV=production babel-node ./dev-env/build.js"
   },
   "keywords": [
     "chrome",
@@ -33,6 +33,7 @@
     "babel-preset-react-hmre": "1.0.1",
     "chokidar": "1.4.2",
     "cli-color": "1.1.0",
+    "cross-env": "^1.0.7",
     "css-loader": "0.23.1",
     "express": "4.13.4",
     "file-loader": "0.8.5",
