@@ -31,7 +31,7 @@ const processAsset = function(object, key, buildPath) {
 
   fs.copySync(assetSrcPath, assetDestPath)
 
-  object[key] = buildAssetPath
+  object[key] = buildAssetPath.replace(/\\/g,"/")
 
   log.done(`Done`)
 
