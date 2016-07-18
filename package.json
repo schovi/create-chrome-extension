@@ -40,9 +40,9 @@
     "fs-extra": "0.26.5",
     "json-loader": "0.5.4",
     "lodash": "4.1.0",
-    "style-loader": "0.13.0",
+    "style-loader": "0.13.1",
     "url-loader": "0.5.7",
-    "webpack": "1.12.2",
-    "webpack-dev-server": "1.12.1"
+    "webpack": "1.13.1",
+    "webpack-dev-server": "1.13.0"
   }
 }
