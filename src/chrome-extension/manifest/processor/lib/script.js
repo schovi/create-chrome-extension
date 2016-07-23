@@ -1,8 +1,9 @@
-import fs from 'fs-extra'
+import fs from 'fs'
 import path from 'path'
+import mkdirp from 'mkdirp'
 
 import * as log from '../../log'
-import * as Remove from '../../../util/remove';
+import * as Remove from '../../../remove';
 
 const makeInjector = function(scriptName) {
   return (
@@ -25,15 +26,15 @@ request.send();`
   )
 }
 
-export default function(scriptName, buildPath) {
+export default function(scriptName, build) {
   if(process.env.NODE_ENV == 'development') {
     log.pending(`Making injector '${scriptName}'`)
 
-    const injectorScript = makeInjector(scriptName);
-    const injectorFilepath = path.join(buildPath, scriptName);
-    const injectorPath = Remove.file(injectorFilepath)
+    const injectorScript   = makeInjector(scriptName);
+    const injectorFilepath = path.join(build, scriptName);
+    const injectorPath     = Remove.file(injectorFilepath)
 
-    fs.mkdirsSync(injectorPath)
+    mkdirp.sync(injectorPath)
     fs.writeFileSync(injectorFilepath, injectorScript, {encoding: 'utf8'})
 
     log.done()

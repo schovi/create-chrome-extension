@@ -1,14 +1,16 @@
 import SingleEntryPlugin from "webpack/lib/SingleEntryPlugin"
 import MultiEntryPlugin from "webpack/lib/MultiEntryPlugin"
-import * as Remove from '../util/remove'
+import * as Remove from '../remove'
 
 export default class ManifestPlugin {
-  constructor(Manifest) {
+  constructor(Manifest, isDevelopment) {
     this.Manifest = Manifest
-    this.isDevelopment = process.env.NODE_ENV != "production"
+    this.isDevelopment = typeof(isDevelopment) == "undefined" ? true : isDevelopment
   }
 
   apply(compiler) {
+    this.Manifest.run()
+
     this.Manifest.scripts.forEach((script) => {
       // name
       const name = Remove.extension(script)

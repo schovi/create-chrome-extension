@@ -8,23 +8,26 @@ const process = function({page, buildPath, scripts}) {
   return true
 }
 
-export default function(manifest, {buildPath}) {
+export default function(manifest, {buildPath, src}) {
 
   if(!manifest.chrome_url_overrides)
     return
 
+  // TODO: unify with ./action.js
   const {bookmarks, history, newtab} = manifest.chrome_url_overrides
 
+  const overrides = [bookmarks, history, newtab]
   const scripts = []
 
-  // Bookmarks page
-  process({page: bookmarks, buildPath, scripts})
+  for (let override of overrides) {
+    if(!override) {
+      continue
+    }
 
-  // History page
-  process({page: history, buildPath, scripts})
+    const script = html(override, src, buildPath)
 
-  // New tab page
-  process({page: newtab, buildPath, scripts})
+    scripts.push(script)
+  }
 
   return {scripts}
 }

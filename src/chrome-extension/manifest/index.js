@@ -1,26 +1,23 @@
-import fs from 'fs-extra'
+import fs from 'fs'
 import path from 'path'
 // import chokidar from 'chokidar'
+import rimraf from 'rimraf';
+import mkdirp from 'mkdirp'
 
 import processors from './processors'
 import * as log from './log'
 
 export default class Manifest {
-  constructor({ manifest, build }) {
-    this.manifestPath = manifest
-    this.buildPath    = build
+  constructor(options) {
+    this.path  = options.manifest
+    this.src   = path.dirname(this.path)
+    this.buildPath = options.output
   }
 
   run() {
     this.prepareBuildDir()
     this.processManifest()
     this.writeManifest()
-  }
-
-  // Start as plugin in webpack
-  apply() {
-    this.run()
-    // this.watch()
   }
 
   // watch() {
@@ -33,7 +30,7 @@ export default class Manifest {
 
   prepareBuildDir() {
     // Prepare clear build
-    fs.removeSync(this.buildPath)
+    rimraf.sync(this.buildPath)
     fs.mkdirSync(this.buildPath)
   }
 
@@ -45,7 +42,7 @@ export default class Manifest {
   }
 
   loadManifest() {
-    return JSON.parse(fs.readFileSync(this.manifestPath, 'utf8'))
+    return JSON.parse(fs.readFileSync(this.path, 'utf8'))
   }
 
   processManifest() {
@@ -72,7 +69,7 @@ export default class Manifest {
       //   const scriptPath = path.join(paths.src, scriptName)
       //
       //   if(!fs.existsSync(scriptPath)) {
-      //     console.warn(clc.red(`Missing script ${scriptPath}`))
+      //     console.warn(colorred(`Missing script ${scriptPath}`))
       //
       //     return
       //   }
