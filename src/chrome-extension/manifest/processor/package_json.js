@@ -1,5 +1,4 @@
 import fs from 'fs'
-import _ from 'lodash'
 import findup from 'findup-sync'
 
 //////////
@@ -10,7 +9,14 @@ export default function(manifest) {
 
   const packageConfig = JSON.parse(fs.readFileSync(packagePath, 'utf8'))
 
-  manifest = _.merge({}, manifest, _.pick(packageConfig, 'name', 'description', 'version'));
+  const { name, description, version } = packageConfig
+
+  manifest = {
+    ...manifest,
+    name,
+    description,
+    version
+  }
 
   return {manifest}
 }

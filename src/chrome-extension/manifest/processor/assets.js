@@ -1,7 +1,5 @@
-import fs from 'fs-extra'
+import { copySync, mkdirsSync } from 'fs-extra'
 import path from 'path'
-import _ from 'lodash'
-import mkdirp from 'mkdirp'
 
 import * as log from '../log'
 import * as Remove from '../../remove';
@@ -19,7 +17,7 @@ const processAsset = function(object, key, src, buildPath) {
   const buildAssetPath = path.join(buildAssetsDir, Remove.path(assetPath))
   const assetDestPath = path.join(buildPath, buildAssetPath)
 
-  fs.copySync(assetSrcPath, assetDestPath)
+  copySync(assetSrcPath, assetDestPath)
 
   object[key] = buildAssetPath
 
@@ -35,9 +33,11 @@ export default function(manifest, {buildPath, src}) {
 
     // Create asset directory
     const buildAssetsDirPath = path.join(buildPath, buildAssetsDir)
-    mkdirp.sync(buildAssetsDirPath)
+    mkdirsSync(buildAssetsDirPath)
 
-    _.forEach(manifest.icons, (iconPath, name) => processAsset(manifest.icons, name, src, buildPath))
+    for(let name in manifest.icons) {
+      processAsset(manifest.icons, name, src, buildPath)
+    }
   }
 
   // TODO can there be more assets?

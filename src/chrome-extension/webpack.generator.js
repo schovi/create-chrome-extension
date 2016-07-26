@@ -40,7 +40,6 @@ function configGenerator(Manifest) {
     cache: isDevelopment,
     debug: isDevelopment,
     devtool: isDevelopment ? 'cheap-module-eval-source-map' : '',
-    context: __dirname,
     node: {__dirname: true},
 
     ///// App config
@@ -200,27 +199,27 @@ function configGenerator(Manifest) {
               exclude: /node_modules/
             }
 
-            const babelQuery = {
-              "presets": [
-                "react",
-                "es2015"
-              ],
-              "plugins": [
-                "transform-object-rest-spread"
-              ]
-            }
+            // const babelQuery = {
+            //   "presets": [
+            //     "react",
+            //     "es2015"
+            //   ],
+            //   "plugins": [
+            //     "transform-object-rest-spread"
+            //   ]
+            // }
 
             if(process.env.NODE_ENV == 'production') {
               return {
                 ...base,
                 loader: 'babel-loader',
-                query: babelQuery
+                // query: babelQuery
               }
             } else {
-              babelQuery.presets = [
-                ...babelQuery.presets,
-                "react-hmre"
-              ]
+              // babelQuery.presets = [
+              //   ...babelQuery.presets,
+              //   "react-hmre"
+              // ]
 
               return {
                 ...base,
@@ -230,7 +229,7 @@ function configGenerator(Manifest) {
                   },
                   {
                     loader: 'babel-loader',
-                    query: babelQuery
+                    // query: babelQuery
                   }
                 ])
               }

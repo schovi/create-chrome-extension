@@ -4,7 +4,7 @@ import path from 'path';
 import { exec } from 'child_process'
 
 // npm
-import rimraf from 'rimraf';
+import { mkdirs, remove } from 'fs-extra'
 import color from 'colors/safe';
 import webpack from 'webpack'
 
@@ -22,8 +22,8 @@ import * as log from './chrome-extension/manifest/log'
  */
 function prepareReleaseDir(options) {
   return new Promise((resolve, reject) => {
-    rimraf(options.release, () => {
-      fs.mkdir(options.release, () => {
+    remove(options.release, () => {
+      mkdirs(options.release, () => {
         resolve()
       })
     })
@@ -75,7 +75,8 @@ function webpackProduction(webpackConfig) {
       // var fs = require('fs')
       // fs.writeFileSync('./bundle-stats.json', JSON.stringify(jsonStats))
 
-      const warnings = jsonStats.warnings
+      const warnings = jsonStats.warnings || []
+
       warnings.forEach((warning) => {
         log.pending(`webpack warning: ${warning}`)
       })

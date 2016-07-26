@@ -1,5 +1,3 @@
-import _ from 'lodash'
-
 import script from './lib/script'
 
 export default function(manifest, {buildPath}) {
@@ -9,10 +7,10 @@ export default function(manifest, {buildPath}) {
 
   const scripts = []
 
-  _.each(content_scripts, (content_script) => {
+  content_scripts.forEach((content_script = []) => {
     // TODO content_script can contain css too.
     // Maybe we can be strict, throw error and tell user to add css into scripts and leave it on webpack too
-    _.each(content_script.js, (scriptPath) => {
+    content_script.js.forEach((scriptPath) => {
       script(scriptPath, buildPath)
       scripts.push(scriptPath)
     })

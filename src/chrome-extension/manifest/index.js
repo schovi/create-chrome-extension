@@ -1,8 +1,8 @@
 import fs from 'fs'
 import path from 'path'
 // import chokidar from 'chokidar'
-import rimraf from 'rimraf';
-import mkdirp from 'mkdirp'
+import { mkdirsSync, removeSync } from 'fs-extra'
+
 
 import processors from './processors'
 import * as log from './log'
@@ -30,8 +30,8 @@ export default class Manifest {
 
   prepareBuildDir() {
     // Prepare clear build
-    rimraf.sync(this.buildPath)
-    fs.mkdirSync(this.buildPath)
+    removeSync(this.buildPath)
+    mkdirsSync(this.buildPath)
   }
 
   writeManifest() {
