@@ -1,4 +1,3 @@
-import path from 'path'
 import html from './lib/html'
 
 export default function(manifest, {buildPath, src}) {

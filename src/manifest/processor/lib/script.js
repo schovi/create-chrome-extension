@@ -1,9 +1,8 @@
-import fs from 'fs'
 import path from 'path'
-import mkdirp from 'mkdirp'
+import fs from 'fs-extra'
 
-import * as log from '../../log'
-import * as Remove from '../../../remove';
+import * as log from '../../../utils/log'
+import * as Remove from '../../../utils/remove';
 
 const makeInjector = function(scriptName) {
   return (
@@ -34,8 +33,8 @@ export default function(scriptName, build) {
     const injectorFilepath = path.join(build, scriptName);
     const injectorPath     = Remove.file(injectorFilepath)
 
-    mkdirp.sync(injectorPath)
-    fs.writeFileSync(injectorFilepath, injectorScript, {encoding: 'utf8'})
+    mkdirsSync(injectorPath)
+    writeFileSync(injectorFilepath, injectorScript, {encoding: 'utf8'})
 
     log.done()
   }

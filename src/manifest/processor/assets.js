@@ -1,8 +1,8 @@
-import { copySync, mkdirsSync } from 'fs-extra'
+import fs from 'fs-extra'
 import path from 'path'
 
-import * as log from '../log'
-import * as Remove from '../../remove';
+import * as log from '../../utils/log'
+import * as Remove from '../../utils/remove';
 
 const buildAssetsDir = "$assets"
 
@@ -17,7 +17,7 @@ const processAsset = function(object, key, src, buildPath) {
   const buildAssetPath = path.join(buildAssetsDir, Remove.path(assetPath))
   const assetDestPath = path.join(buildPath, buildAssetPath)
 
-  copySync(assetSrcPath, assetDestPath)
+  fs.copySync(assetSrcPath, assetDestPath)
 
   object[key] = buildAssetPath
 
@@ -33,7 +33,7 @@ export default function(manifest, {buildPath, src}) {
 
     // Create asset directory
     const buildAssetsDirPath = path.join(buildPath, buildAssetsDir)
-    mkdirsSync(buildAssetsDirPath)
+    fs.mkdirsSync(buildAssetsDirPath)
 
     for(let name in manifest.icons) {
       processAsset(manifest.icons, name, src, buildPath)

@@ -1,11 +1,9 @@
-import fs from 'fs'
+import fs from 'fs-extra'
 import path from 'path'
 // import chokidar from 'chokidar'
-import { mkdirsSync, removeSync } from 'fs-extra'
-
 
 import processors from './processors'
-import * as log from './log'
+import * as log from '../utils/log'
 
 export default class Manifest {
   constructor(options) {
@@ -30,8 +28,8 @@ export default class Manifest {
 
   prepareBuildDir() {
     // Prepare clear build
-    removeSync(this.buildPath)
-    mkdirsSync(this.buildPath)
+    fs.removeSync(this.buildPath)
+    fs.mkdirsSync(this.buildPath)
   }
 
   writeManifest() {
@@ -60,15 +58,16 @@ export default class Manifest {
   }
 
   applyProcessorResult({manifest, scripts} = {}) {
-    if(manifest)
+    if(manifest) {
       this.manifest = manifest
+    }
 
     if(scripts) {
       // TODO validace na skripty
       // const pushScriptName = function(scriptName) {
       //   const scriptPath = path.join(paths.src, scriptName)
       //
-      //   if(!fs.existsSync(scriptPath)) {
+      //   if(!existsSync(scriptPath)) {
       //     console.warn(colorred(`Missing script ${scriptPath}`))
       //
       //     return

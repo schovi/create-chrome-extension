@@ -1,18 +1,17 @@
 // Native
-import fs from 'fs';
 import path from 'path';
 import { exec } from 'child_process'
 
 // npm
-import { mkdirs, remove } from 'fs-extra'
+import fs from 'fs-extra'
 import color from 'colors/safe';
 import webpack from 'webpack'
 
 // our
-import Manifest from './chrome-extension/manifest'
-import overrideHotUpdater from './chrome-extension/override'
-import configGenerator from './chrome-extension/webpack.generator';
-import * as log from './chrome-extension/manifest/log'
+import easyRequire from './utils/easyRequire'
+import overrideHotUpdater from './webpack/override'
+import * as log from './utils/log'
+import { prepareManifest, prepareWebpackConfig}  from './shared'
 
 /**
  * Clear reelase directory
@@ -22,37 +21,12 @@ import * as log from './chrome-extension/manifest/log'
  */
 function prepareReleaseDir(options) {
   return new Promise((resolve, reject) => {
-    remove(options.release, () => {
-      mkdirs(options.release, () => {
+    fs.remove(options.release, () => {
+      fs.mkdirs(options.release, () => {
         resolve()
       })
     })
   })
-}
-
-// TODO: sjednotit s build.js
-/**
-* For given manifest path, process everything in it
-*
-* @param  {String} path Manifest file path
-* @return {Promise(Manifest)}
-*/
-function prepareManifest(options) {
-  return function() {
-    return new Promise((resolve) => {
-      resolve(new Manifest(options))
-    })
-  }
-}
-
-/**
- * Generate webpack config from Manifest
- *
- * @param  {Manifest} manifest
- * @return {Object}
- */
-function prepareWebpackConfig(manifest) {
-  return configGenerator(manifest)
 }
 
 /**
@@ -63,41 +37,44 @@ function prepareWebpackConfig(manifest) {
  */
 function webpackProduction(webpackConfig) {
   return new Promise((resolve, reject) => {
-    // TODO: Does not log :S
-    log.pending(`Processing webpack build`)
+    return easyRequire(() => {
 
-    webpack(webpackConfig, function(fatalError, stats) {
-      var jsonStats = stats.toJson()
+      // TODO: Does not log :S
+      log.pending(`Processing webpack build`)
 
-      // We can save jsonStats to be analyzed with
-      // http://webpack.github.io/analyse or
-      // https://github.com/robertknight/webpack-bundle-size-analyzer.
-      // var fs = require('fs')
-      // fs.writeFileSync('./bundle-stats.json', JSON.stringify(jsonStats))
+      webpack(webpackConfig, function(fatalError, stats) {
+        var jsonStats = stats.toJson()
 
-      const warnings = jsonStats.warnings || []
+        // We can save jsonStats to be analyzed with
+        // http://webpack.github.io/analyse or
+        // https://github.com/robertknight/webpack-bundle-size-analyzer.
+        // var fs = require('fs')
+        // fs.writeFileSync('./bundle-stats.json', JSON.stringify(jsonStats))
 
-      warnings.forEach((warning) => {
-        log.pending(`webpack warning: ${warning}`)
+        const warnings = jsonStats.warnings || []
+
+        warnings.forEach((warning) => {
+          log.pending(`webpack warning: ${warning}`)
+        })
+
+        const buildError = fatalError || jsonStats.errors[0]
+        if(buildError) {
+          reject(`webpack error: ${buildError}`)
+          return
+        }
+
+        const result = stats.toString({
+          colors: true,
+          version: false,
+          hash: false,
+          timings: false,
+          chunks: false,
+          chunkModules: false
+        })
+
+        log.success(`Done with: ${result}`)
+        resolve()
       })
-
-      const buildError = fatalError || jsonStats.errors[0]
-      if(buildError) {
-        reject(`webpack error: ${buildError}`)
-        return
-      }
-
-      const result = stats.toString({
-        colors: true,
-        version: false,
-        hash: false,
-        timings: false,
-        chunks: false,
-        chunkModules: false
-      })
-
-      log.success(`Done with: ${result}`)
-      resolve()
     })
   })
 }

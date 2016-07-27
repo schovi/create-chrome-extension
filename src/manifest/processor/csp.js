@@ -1,4 +1,4 @@
-import * as log from '../log'
+import * as log from '../../utils/log'
 
 //////////
 // CSP. Fix Content security policy to allow eval webpack scripts in development mode

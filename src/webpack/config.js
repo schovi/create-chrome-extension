@@ -1,28 +1,25 @@
-// import fs from "fs";
-// import path from "path"
-
-import combineLoaders from 'webpack-combine-loaders'
 import webpack from 'webpack';
-import _ from 'lodash';
+import combineLoaders from 'webpack-combine-loaders'
+import precss from 'precss'
+import autoprefixer from 'autoprefixer'
 
-import * as Remove from './remove'
-import ManifestPlugin from './manifest/plugin'
+import * as Remove from '../utils/remove'
+import ManifestPlugin from '../manifest/plugin'
+
 
 // NOTE: Style preprocessors
 // If you want to use any of style preprocessor, add related npm package + loader and uncomment following line
 var styleLoaders = {
-  'css': '',
-  'less': '!less-loader',
-  'scss|sass': '!sass-loader'
-  // 'styl': '!stylus-loader'
+  'css': 'postcss-loader',
+  'less': 'less-loader',
+  'scss|sass': 'sass-loader'
 };
 
 function makeStyleLoaders() {
   return Object.keys(styleLoaders).map(function(ext) {
-    // NOTE: Enable autoprefixer loader
-    var prefix = 'css-loader?sourceMap&root=../assets'//!autoprefixer-loader?browsers=last 2 version';
-    var extLoaders = prefix + styleLoaders[ext];
-    var loader = 'style-loader!' + extLoaders;
+    // TODO: Autoprefixer just for webkit. You can guess why :D
+    var prefix = 'css-loader?sourceMap&root=../assets'
+    var loader = 'style-loader!' + prefix + '!' + styleLoaders[ext];;
 
     return {
       test: new RegExp('\\.(' + ext + ')$'),
@@ -32,7 +29,7 @@ function makeStyleLoaders() {
   });
 }
 
-function configGenerator(Manifest) {
+function config(Manifest) {
   const isDevelopment = process.env.NODE_ENV == "development"
 
   return {
@@ -166,29 +163,12 @@ function configGenerator(Manifest) {
         var loaders = [
           // Assets
 
-          // Inline all assets with base64 into javascripts
-          // TODO make and test requiring assets with url
+          // TODO: just some assets I use often. Need to be more dynamic
           {
-            test: /\.wav/,
+            test: /\.(png|jpg|jpeg|gif|svg|wav|woff|woff2|ttf|eot)/,
             exclude: /node_modules/,
             loader: "url-loader?limit=1000000&name=[name]-[hash].[ext]"
           },
-          {
-            test: /\.(png|jpg|jpeg|gif|svg)/,
-            exclude: /node_modules/,
-            loader: "url-loader?limit=1000000&name=[name]-[hash].[ext]"
-          },
-          {
-            test: /\.(woff|woff2)/,
-            exclude: /node_modules/,
-            loader: "url-loader?limit=1000000&name=[name]-[hash].[ext]"
-          },
-          {
-            test: /\.(ttf|eot)/,
-            exclude: /node_modules/,
-            loader: "url-loader?limit=1000000?name=[name]-[hash].[ext]"
-          },
-
           // Styles
           ...makeStyleLoaders(),
 
@@ -199,39 +179,41 @@ function configGenerator(Manifest) {
               exclude: /node_modules/
             }
 
-            // const babelQuery = {
-            //   "presets": [
-            //     "react",
-            //     "es2015"
-            //   ],
-            //   "plugins": [
-            //     "transform-object-rest-spread"
-            //   ]
-            // }
+            const babelQuery = {
+              "presets": [
+                "react",
+                "es2015"
+              ],
+              "plugins": [
+                "transform-object-rest-spread"
+              ]
+            }
 
             if(process.env.NODE_ENV == 'production') {
               return {
                 ...base,
                 loader: 'babel-loader',
-                // query: babelQuery
+                query: babelQuery
               }
             } else {
-              // babelQuery.presets = [
-              //   ...babelQuery.presets,
-              //   "react-hmre"
-              // ]
+              babelQuery.presets = [
+                ...babelQuery.presets,
+                "react-hmre"
+              ]
 
               return {
                 ...base,
-                loader: combineLoaders([
-                  {
-                    loader: 'react-hot-loader'
-                  },
-                  {
-                    loader: 'babel-loader',
-                    // query: babelQuery
-                  }
-                ])
+                loader: 'babel-loader',
+                query: babelQuery
+                // loader: combineLoaders([
+                //   {
+                //     loader: 'react-hot-loader'
+                //   },
+                //   {
+                //     loader: 'babel-loader',
+                //     query: babelQuery
+                //   }
+                // ])
               }
             }
           })(),
@@ -247,8 +229,11 @@ function configGenerator(Manifest) {
 
         return loaders
       })()
+    },
+    postcss: function () {
+      return [precss, autoprefixer];
     }
   }
 }
 
-module.exports = configGenerator
+export default config

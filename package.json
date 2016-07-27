@@ -1,5 +1,5 @@
 {
-  "name": "webpack-chrome-extension",
+  "name": "chrome-extension-scripts",
   "version": "0.9.0",
   "description": "Bootstrap playground for developing Chrome extensions with all new features like Webpack, Babel, React and almost everything you want.",
   "private": true,
@@ -28,18 +28,37 @@
     "hmr"
   ],
   "dependencies": {
+    "autoprefixer": "6.4.0",
+    "babel-loader": "6.2.4",
     "babel-plugin-transform-object-rest-spread": "6.8.0",
     "babel-preset-es2015": "6.9.0",
+    "babel-preset-react": "6.11.1",
+    "babel-preset-react-hmre": "1.1.1",
     "colors": "1.1.2",
     "commander": "2.9.0",
+    "css-loader": "0.23.1",
+    "file-loader": "0.9.0",
     "findup-sync": "0.4.2",
     "fs-extra": "0.30.0",
+    "json-loader": "0.5.4",
+    "less": "2.7.1",
+    "less-loader": "2.2.3",
+    "node-sass": "3.8.0",
+    "postcss-loader": "0.10.0",
+    "precss": "1.4.0",
+    "react-hot-loader": "1.3.0",
+    "sass-loader": "4.0.0",
+    "style-loader": "0.13.1",
+    "url-loader": "0.5.7",
     "webpack": "1.13.1",
     "webpack-combine-loaders": "2.0.0",
     "webpack-dev-server": "1.14.1"
   },
   "devDependencies": {
     "babel-cli": "6.11.4",
-    "babel-core": "6.11.4"
+    "babel-core": "6.11.4",
+    "babel-plugin-transform-object-rest-spread": "6.8.0",
+    "babel-preset-es2015": "6.9.0",
+    "source-map-support": "0.4.2"
   }
 }
