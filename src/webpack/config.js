@@ -30,7 +30,7 @@ function makeStyleLoaders() {
 }
 
 function config(Manifest) {
-  const isDevelopment = process.env.NODE_ENV == "development"
+  const isDevelopment = process.env.NODE_ENV == "development" || true
 
   return {
     ///// Lowlevel config
@@ -182,20 +182,14 @@ function config(Manifest) {
             const babelQuery = {
               "presets": [
                 "react",
-                "es2015"
+                "stage-0"
               ],
               "plugins": [
                 "transform-object-rest-spread"
               ]
             }
 
-            if(process.env.NODE_ENV == 'production') {
-              return {
-                ...base,
-                loader: 'babel-loader',
-                query: babelQuery
-              }
-            } else {
+            if(isDevelopment) {
               babelQuery.presets = [
                 ...babelQuery.presets,
                 "react-hmre"
@@ -214,6 +208,12 @@ function config(Manifest) {
                 //     query: babelQuery
                 //   }
                 // ])
+              }
+            } else {
+              return {
+                ...base,
+                loader: 'babel-loader',
+                query: babelQuery
               }
             }
           })(),

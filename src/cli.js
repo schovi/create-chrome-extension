@@ -4,6 +4,10 @@ import commander from 'commander'
 import { run, build } from './index'
 import pckg from '../package.json'
 
+if(!process.env.NODE_ENV) {
+  process.env.NODE_ENV = "development"
+}
+
 /**
  * Generic settings
  */
@@ -16,28 +20,20 @@ commander
  */
 applyOptions(
   commander
-  .command('run <manifest>')
-  .description('run extension in development environment')
-  .option(
-    '-e --env <env>',
-    'node environment (default: development)',
-    'development'
-  )
-).action(actionHandler(run))
+    .command('run <manifest>')
+    .description('run extension in development environment')
+    .option('-e --env [env]', 'node environment', 'development')
+).action(actionHandler(run));
 
 /**
  * Build command
  */
 applyOptions(
   commander
-  .command('build <manifest>')
-  .description('build extension for distribution')
-  .option(
-    '-e --env <env>',
-    'node environment (default: production)',
-    'production'
-  )
-).action(actionHandler(build))
+    .command('build <manifest>')
+    .description('build extension for distribution')
+    .option('-e --env [env]', 'node environment', 'production')
+).action(actionHandler(build));
 
 /**
  * Start it!
@@ -60,10 +56,7 @@ function applyOptions(commander) {
     //     resolvePath('config', path)
     //   }
     // )
-    .option(
-      '-o --output <path>',
-      'output directory path'
-    )
+    .option('-o --output <path>', 'output directory path')
   )
 }
 
@@ -88,13 +81,13 @@ function resolvePath(pathToResolve, required = false) {
  * @param  {Command} command
  * @return {Object}
  */
-function processOptions(command) {
-  const output = resolvePath(command.output, 'output')
+function processOptions(options) {
+  const output = resolvePath(options.output, 'output')
   // const config = resolvePath(command, 'config')
 
   return {
-    output,
-    // config
+    ...options,
+    output
   }
 }
 
@@ -105,10 +98,10 @@ function processOptions(command) {
  * @return {Function}
  */
 function actionHandler(runner) {
-  return function(manifest, command) {
+  return function(manifest, options) {
     try {
       runner({
-        ...processOptions(command),
+        ...processOptions(options),
         manifest: path.resolve(manifest)
       })
     } catch(ex) {
@@ -121,9 +114,6 @@ function actionHandler(runner) {
   }
 }
 
-function MissingOptionError(message = "") {
-    this.name = "MissingOptionError"
-    this.message = message
-}
+class MissingOptionError extends Error {
 
-MissingOptionError.prototype = Error.prototype;
+}

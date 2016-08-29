@@ -123,7 +123,7 @@ function makeExtension(options) {
 }
 
 function build(options) {
-  process.env.NODE_ENV = 'production'
+  process.env.NODE_ENV = options.env
 
   options = {
     ...options,

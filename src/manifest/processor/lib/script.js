@@ -1,5 +1,5 @@
 import path from 'path'
-import fs from 'fs-extra'
+import { mkdirsSync, writeFileSync} from 'fs-extra'
 
 import * as log from '../../../utils/log'
 import * as Remove from '../../../utils/remove';

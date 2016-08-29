@@ -67,7 +67,7 @@ function webpackDevelopment(webpackConfig) {
 }
 
 function run(options) {
-  process.env.NODE_ENV = options.environment
+  process.env.NODE_ENV = options.env
 
   override()
   .then(prepareManifest(options))
