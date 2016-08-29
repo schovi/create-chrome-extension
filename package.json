@@ -1,6 +1,6 @@
 {
   "name": "chrome-extension-scripts",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "description": "Zero configuration environment for developing Chrome extensions with all new features like Webpack, Babel, React and almost everything you want.",
   "author": "David Schovanec",
   "bin": {
@@ -26,6 +26,13 @@
     "hot",
     "reload"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/schovi/create-chrome-extension"
+  },
+  "bugs": {
+    "url": "https://github.com/schovi/create-chrome-extension/issues"
+  },
   "dependencies": {
     "autoprefixer": "6.4.0",
     "babel-loader": "6.2.5",

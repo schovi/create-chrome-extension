@@ -1,6 +1,6 @@
 {
   "name": "create-chrome-extension",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Create Chrome Extension without any configuration",
   "keywords": [
     "chrome-extension",
@@ -9,10 +9,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/schovi/webpack-chrome-extension"
+    "url": "https://github.com/schovi/create-chrome-extension"
   },
   "bugs": {
-    "url": "https://github.com/schovi/webpack-chrome-extension/issues"
+    "url": "https://github.com/schovi/create-chrome-extension/issues"
   },
   "author": "David Schovanec",
   "license": "BSD-3-Clause"
