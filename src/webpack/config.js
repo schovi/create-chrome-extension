@@ -6,14 +6,15 @@ import autoprefixer from 'autoprefixer'
 import * as Remove from '../utils/remove'
 import ManifestPlugin from '../manifest/plugin'
 
-
 // NOTE: Style preprocessors
 // If you want to use any of style preprocessor, add related npm package + loader and uncomment following line
-var styleLoaders = {
+const styleLoaders = {
   'css': 'postcss-loader',
   'less': 'less-loader',
   'scss|sass': 'sass-loader'
 };
+
+const exclude = /(node_modules|bower_components)/
 
 function makeStyleLoaders() {
   return Object.keys(styleLoaders).map(function(ext) {
@@ -23,7 +24,7 @@ function makeStyleLoaders() {
 
     return {
       test: new RegExp('\\.(' + ext + ')$'),
-      exclude: /(node_modules|bower_components)/,
+      exclude: exclude,
       loader: loader
     };
   });
@@ -37,7 +38,7 @@ function config(Manifest) {
     cache: isDevelopment,
     debug: isDevelopment,
     devtool: isDevelopment ? 'cheap-module-eval-source-map' : '',
-    node: {__dirname: true},
+    node: { __dirname: true },
 
     ///// App config
 
@@ -166,7 +167,7 @@ function config(Manifest) {
           // TODO: just some assets I use often. Need to be more dynamic
           {
             test: /\.(png|jpg|jpeg|gif|svg|wav|woff|woff2|ttf|eot)/,
-            exclude: /(node_modules|bower_components)/,
+            exclude: exclude,
             loader: "url-loader?limit=1000000&name=[name]-[hash].[ext]"
           },
           // Styles
@@ -176,7 +177,7 @@ function config(Manifest) {
           (function() {
             const base = {
               test: /\.jsx?$/,
-              exclude: /(node_modules|bower_components)/
+              exclude: exclude
             }
 
             const babelQuery = {
@@ -228,7 +229,7 @@ function config(Manifest) {
           // Json
           {
             test: /\.json/,
-            exclude: /(node_modules|bower_components)/,
+            exclude: exclude,
             loader: "json-loader"
           }
           // NOTE: Add more loaders here
