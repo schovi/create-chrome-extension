@@ -1,8 +1,8 @@
 {
   "name": "chrome-extension-scripts",
   "version": "0.9.0",
-  "description": "Bootstrap playground for developing Chrome extensions with all new features like Webpack, Babel, React and almost everything you want.",
-  "private": true,
+  "description": "Zero configuration environment for developing Chrome extensions with all new features like Webpack, Babel, React and almost everything you want.",
+  "author": "David Schovanec",
   "bin": {
     "chrome-extension": "./bin/chrome-extension"
   },
@@ -24,8 +24,7 @@
     "reactjs",
     "boilerplate",
     "hot",
-    "reload",
-    "hmr"
+    "reload"
   ],
   "dependencies": {
     "autoprefixer": "6.4.0",
@@ -64,5 +63,6 @@
     "babel-plugin-transform-object-rest-spread": "6.8.0",
     "babel-preset-es2015": "6.14.0",
     "source-map-support": "0.4.2"
-  }
+  },
+  "license": "MIT"
 }
