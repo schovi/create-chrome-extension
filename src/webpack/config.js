@@ -23,7 +23,7 @@ function makeStyleLoaders() {
 
     return {
       test: new RegExp('\\.(' + ext + ')$'),
-      exclude: /node_modules/,
+      exclude: /(node_modules|bower_components)/,
       loader: loader
     };
   });
@@ -166,7 +166,7 @@ function config(Manifest) {
           // TODO: just some assets I use often. Need to be more dynamic
           {
             test: /\.(png|jpg|jpeg|gif|svg|wav|woff|woff2|ttf|eot)/,
-            exclude: /node_modules/,
+            exclude: /(node_modules|bower_components)/,
             loader: "url-loader?limit=1000000&name=[name]-[hash].[ext]"
           },
           // Styles
@@ -176,23 +176,30 @@ function config(Manifest) {
           (function() {
             const base = {
               test: /\.jsx?$/,
-              exclude: /node_modules/
+              exclude: /(node_modules|bower_components)/
             }
 
             const babelQuery = {
-              "presets": [
-                "react",
-                "stage-0"
-              ],
-              "plugins": [
-                "transform-object-rest-spread"
-              ]
+              cacheDirectory: true,
+              plugins: [ "transform-decorators-legacy" ],
+              presets: [ "react", "es2015", "es2016", "es2017", "stage-0" ]
+              // [
+              //   [
+              //     "target", {
+              //       plugins: [ "transform-decorators-legacy" ],
+              //       presets: [ "es2015", "es2016", "es2017", "stage-0" ],
+              //       targets: [
+              //         { name: "chrome", version: 52 }
+              //       ]
+              //     }
+              //   ]
+              // ]
             }
 
             if(isDevelopment) {
               babelQuery.presets = [
-                ...babelQuery.presets,
-                "react-hmre"
+                "react-hmre",
+                ...babelQuery.presets
               ]
 
               return {
@@ -221,7 +228,7 @@ function config(Manifest) {
           // Json
           {
             test: /\.json/,
-            exclude: /node_modules/,
+            exclude: /(node_modules|bower_components)/,
             loader: "json-loader"
           }
           // NOTE: Add more loaders here
