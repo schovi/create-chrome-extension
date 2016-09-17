@@ -8,6 +8,7 @@ import { exec } from 'child_process'
 import fs from 'fs-extra'
 import color from 'colors/safe';
 import webpack from 'webpack'
+import chromeBinaryPath from 'chrome-location';
 
 // our
 import easyRequire from './utils/easyRequire'
@@ -92,8 +93,6 @@ function webpackProduction(webpackConfig) {
 function makeExtension(options) {
   return function() {
     return new Promise((resolve, reject) => {
-      // TODO detect system and Chrome path
-      const chromeBinaryPath = '/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome'
       console.log(color.yellow(`Building extension into '${options.release}'`))
 
       setTimeout(() => {
