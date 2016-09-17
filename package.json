@@ -45,6 +45,7 @@
     "babel-preset-stage-0": "6.5.0",
     "babel-preset-target": "0.0.4",
     "case-sensitive-paths-webpack-plugin": "1.1.4",
+    "chrome-location": "^1.2.1",
     "colors": "1.1.2",
     "commander": "2.9.0",
     "css-loader": "0.24.0",
