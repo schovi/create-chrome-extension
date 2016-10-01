@@ -19,8 +19,8 @@ export default class ManifestPlugin {
       let item
       if(this.isDevelopment) {
         item = [
-          'webpack-dev-server/client?https://localhost:3001',
-          'webpack/hot/only-dev-server',
+          require.resolve('webpack-dev-server/client') + '?https://localhost:3001',
+          require.resolve('webpack/hot/only-dev-server'),
           script
         ]
       } else {

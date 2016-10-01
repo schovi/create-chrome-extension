@@ -3,7 +3,6 @@
 	Author Tobias Koppers @sokra
 */
 /*globals hotAddUpdateChunk parentHotUpdateCallback document XMLHttpRequest $require$ $hotChunkFilename$ $hotMainFilename$ */
-
 module.exports = function() {
 	function webpackHotUpdateCallback(chunkId, moreModules) { // eslint-disable-line no-unused-vars
 		hotAddUpdateChunk(chunkId, moreModules);
@@ -35,7 +34,6 @@ module.exports = function() {
     request.send();
  	}
   //////////////////// END
-
 
 	function hotDownloadManifest(callback) { // eslint-disable-line no-unused-vars
 		if(typeof XMLHttpRequest === "undefined")
