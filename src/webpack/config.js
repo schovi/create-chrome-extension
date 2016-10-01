@@ -67,7 +67,6 @@ function config(Manifest) {
     // Plugins
     plugins: (function() {
       let plugins = [
-        new webpack.optimize.OccurenceOrderPlugin(),
         new ManifestPlugin(Manifest, isDevelopment),
         new webpack.DefinePlugin({
           "global.GENTLY": false,
@@ -93,15 +92,21 @@ function config(Manifest) {
         // Production plugins for optimizing code
         plugins = [
           ...plugins,
+          new webpack.optimize.OccurrenceOrderPlugin(),
+          new webpack.optimize.DedupePlugin(),
           new webpack.optimize.UglifyJsPlugin({
             compress: {
-              // Because uglify reports so many irrelevant warnings.
+              screw_ie8: true, // React doesn't support IE8
               warnings: false
+            },
+            mangle: {
+              screw_ie8: true
+            },
+            output: {
+              comments: false,
+              screw_ie8: true
             }
           }),
-          new webpack.optimize.DedupePlugin(),
-          // new webpack.optimize.LimitChunkCountPlugin({maxChunks: 15}),
-          // new webpack.optimize.MinChunkSizePlugin({minChunkSize: 10000}),
           function() {
             this.plugin("done", function(stats) {
               if (stats.compilation.errors && stats.compilation.errors.length) {
