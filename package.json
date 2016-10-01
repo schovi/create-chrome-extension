@@ -1,6 +1,6 @@
 {
   "name": "chrome-extension-scripts",
-  "version": "0.9.3",
+  "version": "0.9.4",
   "description": "Zero configuration environment for developing Chrome extensions with all new features like Webpack, Babel, React and almost everything you want.",
   "author": "David Schovanec",
   "bin": {
