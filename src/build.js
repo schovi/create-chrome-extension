@@ -46,8 +46,7 @@ function webpackProduction(webpackConfig) {
       log.pending(`Processing webpack build`)
 
       webpack(webpackConfig, function(fatalError, stats) {
-
-        var jsonStats = stats.toJson()
+        var jsonStats = stats && stats.toJson()
 
         // We can save jsonStats to be analyzed with
         // http://webpack.github.io/analyse or

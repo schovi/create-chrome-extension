@@ -1,5 +1,4 @@
 import webpack from 'webpack';
-import combineLoaders from 'webpack-combine-loaders'
 import precss from 'precss'
 import autoprefixer from 'autoprefixer'
 
@@ -14,8 +13,6 @@ const styleLoaders = {
   'scss|sass': 'sass-loader'
 };
 
-const exclude = /(node_modules|bower_components)/
-
 function makeStyleLoaders() {
   return Object.keys(styleLoaders).map(function(ext) {
     // TODO: Autoprefixer just for webkit. You can guess why :D
@@ -24,7 +21,6 @@ function makeStyleLoaders() {
 
     return {
       test: new RegExp('\\.(' + ext + ')$'),
-      exclude: exclude,
       loader: loader
     };
   });
@@ -72,6 +68,7 @@ module.exports = function(Manifest) {
           test: /\.(js|jsx)?$/,
           loader: 'babel-loader',
           query: {
+            babelrc: false,
             cacheDirectory: true,
             plugins: [ "transform-decorators-legacy" ],
             presets: [ "react", "es2015", "es2016", "es2017", "stage-0" ]
@@ -87,7 +84,6 @@ module.exports = function(Manifest) {
 
         {
           test: /\.(ico|jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)/,
-          exclude: exclude,
           loader: "url-loader?limit=1000000&name=[name]-[hash].[ext]"
         }
       ]
@@ -103,7 +99,7 @@ module.exports = function(Manifest) {
       ];
     },
     plugins: [
-      new ManifestPlugin(Manifest, true),
+      new ManifestPlugin(Manifest),
       new webpack.DefinePlugin({
         "global.GENTLY": false,
         "process.env.APP_ENV": JSON.stringify(process.env.APP_ENV),
