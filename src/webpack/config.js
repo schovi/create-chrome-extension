@@ -14,8 +14,6 @@ const styleLoaders = {
   'scss|sass': 'sass-loader'
 };
 
-const exclude = /(node_modules|bower_components)/
-
 function makeStyleLoaders() {
   return Object.keys(styleLoaders).map(function(ext) {
     // TODO: Autoprefixer just for webkit. You can guess why :D
@@ -24,7 +22,6 @@ function makeStyleLoaders() {
 
     return {
       test: new RegExp('\\.(' + ext + ')$'),
-      exclude: exclude,
       loader: loader
     };
   });

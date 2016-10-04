@@ -1,3 +1,5 @@
+process.env.NODE_ENV = 'development'
+
 // npm
 import color from 'colors/safe'
 import webpack from 'webpack'
@@ -7,7 +9,8 @@ import WebpackDevServer from 'webpack-dev-server'
 import easyRequire from './utils/easyRequire'
 import overrideHotUpdater from './webpack/override'
 import * as log from './utils/log'
-import { prepareManifest, prepareWebpackConfig}  from './shared'
+import { prepareManifest }  from './shared'
+import webpackGenerator from './webpack/webpack.config.dev'
 
 /**
  * Override webpack package files
@@ -67,11 +70,11 @@ function webpackDevelopment(webpackConfig) {
 }
 
 function run(options) {
-  process.env.NODE_ENV = options.env
-
   override()
   .then(prepareManifest(options))
-  .then(prepareWebpackConfig)
+  .then((Manifest) => {
+    return webpackGenerator(Manifest)
+  })
   .then(webpackDevelopment)
   // Development server ready
   .then(function(message) {

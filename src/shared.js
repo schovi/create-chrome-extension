@@ -1,5 +1,4 @@
 import Manifest from './manifest'
-import configGenerator from './webpack/config';
 
 /**
 * For given manifest path, process everything in it
@@ -13,14 +12,4 @@ export function prepareManifest(options) {
       resolve(new Manifest(options))
     })
   }
-}
-
-/**
- * Generate webpack config from Manifest
- *
- * @param  {Manifest} manifest
- * @return {Object}
- */
-export function prepareWebpackConfig(manifest) {
-  return configGenerator(manifest)
 }

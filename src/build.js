@@ -1,3 +1,5 @@
+process.env.NODE_ENV = 'production'
+
 // Native
 import path from 'path';
 import { exec } from 'child_process'
@@ -11,7 +13,8 @@ import webpack from 'webpack'
 import easyRequire from './utils/easyRequire'
 import overrideHotUpdater from './webpack/override'
 import * as log from './utils/log'
-import { prepareManifest, prepareWebpackConfig}  from './shared'
+import { prepareManifest }  from './shared'
+import webpackGenerator from './webpack/webpack.config.prod'
 
 /**
  * Clear reelase directory
@@ -43,6 +46,7 @@ function webpackProduction(webpackConfig) {
       log.pending(`Processing webpack build`)
 
       webpack(webpackConfig, function(fatalError, stats) {
+
         var jsonStats = stats.toJson()
 
         // We can save jsonStats to be analyzed with
@@ -51,13 +55,14 @@ function webpackProduction(webpackConfig) {
         // var fs = require('fs')
         // fs.writeFileSync('./bundle-stats.json', JSON.stringify(jsonStats))
 
-        const warnings = jsonStats.warnings || []
+        const warnings = (jsonStats && jsonStats.warnings) || []
 
         warnings.forEach((warning) => {
           log.pending(`webpack warning: ${warning}`)
         })
 
-        const buildError = fatalError || jsonStats.errors[0]
+        const buildError = fatalError || (jsonStats && jsonStats.errors[0])
+
         if(buildError) {
           reject(`webpack error: ${buildError}`)
           return
@@ -123,8 +128,6 @@ function makeExtension(options) {
 }
 
 function build(options) {
-  process.env.NODE_ENV = options.env
-
   options = {
     ...options,
     key: options.key && path.resolve(options.key),
@@ -138,7 +141,9 @@ function build(options) {
   // 2) really really really want to override it
   prepareReleaseDir(options)
   .then(prepareManifest(options))
-  .then(prepareWebpackConfig)
+  .then((Manifest) => {
+    return webpackGenerator(Manifest)
+  })
   .then(webpackProduction)
   .then(makeExtension(options))
   // Extension done

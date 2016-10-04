@@ -1,11 +1,10 @@
 import fs from 'fs'
 import path from 'path'
 import commander from 'commander'
-import { run, build } from './index'
 import pckg from '../package.json'
 
-if(!process.env.NODE_ENV) {
-  process.env.NODE_ENV = "development"
+class MissingOptionError extends Error {
+
 }
 
 /**
@@ -22,8 +21,7 @@ applyOptions(
   commander
     .command('run <manifest>')
     .description('run extension in development environment')
-    .option('-e --env [env]', 'node environment', 'development')
-).action(actionHandler(run));
+).action(runHandler);
 
 /**
  * Build command
@@ -32,8 +30,7 @@ applyOptions(
   commander
     .command('build <manifest>')
     .description('build extension for distribution')
-    .option('-e --env [env]', 'node environment', 'production')
-).action(actionHandler(build));
+).action(buildHandler);
 
 /**
  * Start it!
@@ -95,25 +92,29 @@ function processOptions(options) {
  * Returns handler for Command action with given function
  *
  * @param  {Function} runner
- * @return {Function}
+ * @param  {String} manifest
+ * @param  {Object} options
  */
-function actionHandler(runner) {
-  return function(manifest, options) {
-    try {
-      runner({
-        ...processOptions(options),
-        manifest: path.resolve(manifest)
-      })
-    } catch(ex) {
-      if(ex instanceof MissingOptionError) {
-        console.error(`\n  ${ex.message}\n`)
-      } else {
-        throw ex
-      }
+function actionHandler(runner, manifest, options) {
+  try {
+    runner({
+      ...processOptions(options),
+      manifest: path.resolve(manifest)
+    })
+  } catch(ex) {
+    if(ex instanceof MissingOptionError) {
+      console.error(`\n  ${ex.message}\n`)
+    } else {
+      throw ex
     }
   }
 }
 
-class MissingOptionError extends Error {
+function runHandler(manifest, options) {
+  actionHandler(require('./run'), manifest, options)
+}
 
+
+function buildHandler(manifest, options) {
+  actionHandler(require('./build'), manifest, options)
 }
