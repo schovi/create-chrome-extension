@@ -110,13 +110,15 @@ How to run it
 1. everything looks fine, but scripts from webpack arent loading.
   - Probably problem with development ssl certificates. Open any script (i.e. https://localhost:3001/path_to_your_script.js) in separate tab and allow chrome to load it anyway. Then reload extension.
 
+#### Done
+- [x] detect Chrome path for building extension
+
 #### Future
 
 - [ ] allow to pass existing `.pem` when building extension
 - [ ] experiment with hot middleware (hints in NOTE.md)
 - [ ] allow to have "static" files which will be merged into build
 - [ ] allow to reload extension when popup html file changed
-- [ ] detect Chrome path for building extension
 - [ ] solve Hot reload fix better than overriding file in /node_modules. It is really ugly and hacky
 - [ ] test assets without base64
 - [ ] add support for [extension updating](https://developer.chrome.com/extensions/packaging#update)
