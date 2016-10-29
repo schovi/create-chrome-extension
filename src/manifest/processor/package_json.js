@@ -11,10 +11,10 @@ export default function(manifest) {
   const { name, description, version } = packageConfig
 
   manifest = {
-    ...manifest,
     name,
     description,
-    version
+    version,
+    ...manifest
   }
 
   return {manifest}
