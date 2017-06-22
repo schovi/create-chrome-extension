@@ -57,6 +57,9 @@ function webpackDevelopment(webpackConfig) {
           // timings: false,
           // chunks: false,
           // chunkModules: false
+        },
+        headers: {
+          'Access-Control-Allow-Origin': '*'
         }
       }).listen(port, host, function (err, result) {
         if (err) {
