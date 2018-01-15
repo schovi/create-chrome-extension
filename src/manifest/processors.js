@@ -5,7 +5,7 @@ import Action      from './processor/action'
 import Background  from './processor/background'
 import Content     from './processor/content'
 import Overrides   from './processor/overrides'
-
+import Options     from './processor/options'
 
 const processors = [
   // Fix csp for devel
@@ -21,7 +21,9 @@ const processors = [
   // Process content script
   Content,
   // Process overrides
-  Overrides
+  Overrides,
+  // Process options page
+  Options
 ]
 
 export default processors
